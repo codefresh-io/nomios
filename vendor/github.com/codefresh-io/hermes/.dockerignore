@@ -1,0 +1,6 @@
+.git
+.gitignore
+.bin
+*/debug
+*/debug.test
+*/*/debug.test

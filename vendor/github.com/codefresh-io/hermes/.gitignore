@@ -1,0 +1,4 @@
+.vscode
+.bin
+**/debug
+**/debug.test
