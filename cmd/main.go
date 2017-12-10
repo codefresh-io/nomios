@@ -12,6 +12,21 @@ import (
 	"github.com/urfave/cli"
 )
 
+// HermesDryRun dry run stub
+type HermesDryRun struct {
+}
+
+// TriggerEvent dry run version
+func (m *HermesDryRun) TriggerEvent(event *hermes.NormalizedEvent) error {
+	fmt.Println(event.EventURI)
+	fmt.Println("\tSecret: ", event.Secret)
+	fmt.Println("\tVariables:")
+	for k, v := range event.Variables {
+		fmt.Println("\t\t", k, "=", v)
+	}
+	return nil
+}
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "dockerhub-provider"
@@ -43,6 +58,10 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 					Value:  "TOKEN",
 					EnvVar: "HERMES_TOKEN",
 				},
+				cli.BoolFlag{
+					Name:  "dry-run",
+					Usage: "do not send trigger event, just print it out",
+				},
 			},
 			Usage:       "start dockerhub-provider webhook handler server",
 			Description: "Run DockerHub WebHook handler server. Proccess and send normalized event payload to the Codefresh Hermes trigger manager service to invoke associated Codefresh pipelines.",
@@ -72,11 +91,16 @@ func runServer(c *cli.Context) error {
 	fmt.Println(version.ASCIILogo)
 
 	// bind dockerhub to hermes API endpoint
-	dockerhub := dockerhub.NewDockerHub(hermes.NewHermesEndpoint(c.String("hermes"), c.String("hermes")))
+	var hub *dockerhub.DockerHub
+	if c.Bool("dry-run") {
+		hub = dockerhub.NewDockerHub(&HermesDryRun{})
+	} else {
+		hub = dockerhub.NewDockerHub(hermes.NewHermesEndpoint(c.String("hermes"), c.String("hermes")))
+	}
 
 	// setup gin router
 	router := gin.Default()
-	router.POST("/dockerhub", dockerhub.HandleWebhook)
+	router.POST("/dockerhub", hub.HandleWebhook)
 	router.Run()
 	return nil
 }

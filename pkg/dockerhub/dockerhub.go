@@ -18,28 +18,28 @@ type DockerHub struct {
 
 type webhookPayload struct {
 	PushData struct {
-		PushedAt float64       `json:"pushed_at"`
+		PushedAt int64         `json:"pushed_at"`
 		Images   []interface{} `json:"images"`
 		Tag      string        `json:"tag"`
 		Pusher   string        `json:"pusher"`
 	} `json:"push_data"`
 	CallbackURL string `json:"callback_url"`
 	Repository  struct {
-		Status          string  `json:"status"`
-		Description     string  `json:"description"`
-		IsTrusted       bool    `json:"is_trusted"`
-		FullDescription string  `json:"full_description"`
-		RepoURL         string  `json:"repo_url"`
-		Owner           string  `json:"owner"`
-		IsOfficial      bool    `json:"is_official"`
-		IsPrivate       bool    `json:"is_private"`
-		Name            string  `json:"name"`
-		Namespace       string  `json:"namespace"`
-		StarCount       int     `json:"star_count"`
-		CommentCount    string  `json:"comment_count"`
-		DateCreated     float64 `json:"date_created"`
-		Dockerfile      string  `json:"dockerfile"`
-		RepoName        string  `json:"repo_name"`
+		Status          string `json:"status"`
+		Description     string `json:"description"`
+		IsTrusted       bool   `json:"is_trusted"`
+		FullDescription string `json:"full_description"`
+		RepoURL         string `json:"repo_url"`
+		Owner           string `json:"owner"`
+		IsOfficial      bool   `json:"is_official"`
+		IsPrivate       bool   `json:"is_private"`
+		Name            string `json:"name"`
+		Namespace       string `json:"namespace"`
+		StarCount       int    `json:"star_count"`
+		CommentCount    int    `json:"comment_count"`
+		DateCreated     int64  `json:"date_created"`
+		Dockerfile      string `json:"dockerfile"`
+		RepoName        string `json:"repo_name"`
 	} `json:"repository"`
 }
 
