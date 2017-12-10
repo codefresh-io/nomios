@@ -6,7 +6,7 @@ import (
 
 	"github.com/codefresh-io/dockerhub-provider/pkg/dockerhub"
 	"github.com/codefresh-io/dockerhub-provider/pkg/hermes"
-	"github.com/codefresh-io/hermes/pkg/version"
+	"github.com/codefresh-io/dockerhub-provider/pkg/version"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
