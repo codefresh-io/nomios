@@ -58,14 +58,24 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 					Value:  "TOKEN",
 					EnvVar: "HERMES_TOKEN",
 				},
-				cli.BoolFlag{
-					Name:  "dry-run",
-					Usage: "do not send trigger event, just print it out",
-				},
 			},
 			Usage:       "start dockerhub-provider webhook handler server",
 			Description: "Run DockerHub WebHook handler server. Proccess and send normalized event payload to the Codefresh Hermes trigger manager service to invoke associated Codefresh pipelines.",
 			Action:      runServer,
+		},
+	}
+	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:  "debug",
+			Usage: "enable debug mode with verbose logging",
+		},
+		cli.BoolFlag{
+			Name:  "dry-run",
+			Usage: "do not execute commands, just log",
+		},
+		cli.BoolFlag{
+			Name:  "json",
+			Usage: "produce log in JSON format: Logstash and Splunk friendly",
 		},
 	}
 
