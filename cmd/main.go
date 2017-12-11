@@ -60,6 +60,11 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 					Value:  "TOKEN",
 					EnvVar: "HERMES_TOKEN",
 				},
+				cli.IntFlag{
+					Name:  "port",
+					Usage: "TCP port for the dockerhub provider server",
+					Value: 8080,
+				},
 			},
 			Usage: "start dockerhub-provider webhook handler server",
 			Description: `Run DockerHub WebHook handler server. Process and send normalized event payload to the Codefresh Hermes trigger manager service to invoke associated Codefresh pipelines.
