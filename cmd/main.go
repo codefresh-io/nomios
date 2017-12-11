@@ -118,7 +118,7 @@ func runServer(c *cli.Context) error {
 	router.GET("/health", getHealth)
 	router.GET("/version", getVersion)
 	router.GET("/", getVersion)
-	router.Run()
+	router.Run(fmt.Sprintf(":%d", c.Int("port")))
 	return nil
 }
 
