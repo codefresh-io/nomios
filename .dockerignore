@@ -1,0 +1,7 @@
+.idea
+.cover
+.vscode
+.bin
+
+# dep files
+Gopkg.*
