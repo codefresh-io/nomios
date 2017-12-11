@@ -38,6 +38,7 @@ func main() {
 	app.UsageText = fmt.Sprintf(`Run DockerHub WebHook handler server.
 %s
 dockerhub-provider respects following environment variables:
+
    - HERMES_SERVICE     - set the url to the Hermes service (default "hermes")
    
 Copyright © Codefresh.io`, version.ASCIILogo)
@@ -60,9 +61,11 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 					EnvVar: "HERMES_TOKEN",
 				},
 			},
-			Usage:       "start dockerhub-provider webhook handler server",
-			Description: "Run DockerHub WebHook handler server. Process and send normalized event payload to the Codefresh Hermes trigger manager service to invoke associated Codefresh pipelines.",
-			Action:      runServer,
+			Usage: "start dockerhub-provider webhook handler server",
+			Description: `Run DockerHub WebHook handler server. Process and send normalized event payload to the Codefresh Hermes trigger manager service to invoke associated Codefresh pipelines.
+			
+		Event URI Pattern: index.docker.io:<namespace>:<name>:<tag>:push`,
+			Action: runServer,
 		},
 	}
 	app.Flags = []cli.Flag{
