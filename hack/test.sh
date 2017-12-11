@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Generate test coverage statistics for Go packages.
 #
 # Works around the fact that `go test -coverprofile` currently does not work
@@ -25,7 +25,7 @@ generate_cover_data() {
   [ -d "${COVER}" ] && rm -rf "${COVER:?}/*"
   [ -d "${COVER}" ] || mkdir -p "${COVER}"
 
-  pkgs=($(go list -f '{{if .TestGoFiles}}{{ .ImportPath }}{{end}}' ./... | grep -v vendor))
+  IFS=$'\n' read -r -a pkgs <<< "$(go list -f '{{if .TestGoFiles}}{{ .ImportPath }}{{end}}' ./... | grep -v vendor)"
 
   for pkg in "${pkgs[@]}"; do
     f="${COVER}/$(echo $pkg | tr / -).cover"

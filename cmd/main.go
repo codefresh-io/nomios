@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/codefresh-io/dockerhub-provider/pkg/dockerhub"
@@ -111,6 +112,17 @@ func runServer(c *cli.Context) error {
 	// setup gin router
 	router := gin.Default()
 	router.POST("/dockerhub", hub.HandleWebhook)
+	router.GET("/health", getHealth)
+	router.GET("/version", getVersion)
+	router.GET("/", getVersion)
 	router.Run()
 	return nil
+}
+
+func getHealth(c *gin.Context) {
+	c.Status(http.StatusOK)
+}
+
+func getVersion(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"version": version.HumanVersion})
 }
