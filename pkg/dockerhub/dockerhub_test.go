@@ -47,7 +47,7 @@ func TestContextBindWithQuery(t *testing.T) {
 	// setup mock
 	hermesMock := new(HermesMock)
 	event := hermes.NormalizedEvent{
-		EventURI: "hub.docker.com:alexeiled:alpine-plus:latest:push",
+		EventURI: "index.docker.io:alexeiled:alpine-plus:latest:push",
 		Original: string(data),
 		Secret:   "SECRET",
 		Variables: map[string]string{
