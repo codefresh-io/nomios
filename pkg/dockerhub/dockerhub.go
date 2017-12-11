@@ -49,7 +49,7 @@ func NewDockerHub(svc hermes.Service) *DockerHub {
 }
 
 func constructEventURI(payload *webhookPayload) string {
-	return fmt.Sprintf("hub.docker.com:%s:%s:%s:push", payload.Repository.Namespace, payload.Repository.Name, payload.PushData.Tag)
+	return fmt.Sprintf("index.docker.io:%s:%s:%s:push", payload.Repository.Namespace, payload.Repository.Name, payload.PushData.Tag)
 }
 
 // HandleWebhook handle DockerHub webhook

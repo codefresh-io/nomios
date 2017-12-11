@@ -60,7 +60,7 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 				},
 			},
 			Usage:       "start dockerhub-provider webhook handler server",
-			Description: "Run DockerHub WebHook handler server. Proccess and send normalized event payload to the Codefresh Hermes trigger manager service to invoke associated Codefresh pipelines.",
+			Description: "Run DockerHub WebHook handler server. Process and send normalized event payload to the Codefresh Hermes trigger manager service to invoke associated Codefresh pipelines.",
 			Action:      runServer,
 		},
 	}
