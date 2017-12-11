@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/codefresh-io/dockerhub-provider/pkg/hermes"
+	"github.com/codefresh-io/nomios/pkg/hermes"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )

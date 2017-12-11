@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/codefresh-io/dockerhub-provider/pkg/dockerhub"
-	"github.com/codefresh-io/dockerhub-provider/pkg/hermes"
-	"github.com/codefresh-io/dockerhub-provider/pkg/version"
+	"github.com/codefresh-io/nomios/pkg/dockerhub"
+	"github.com/codefresh-io/nomios/pkg/hermes"
+	"github.com/codefresh-io/nomios/pkg/version"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
@@ -30,14 +30,14 @@ func (m *HermesDryRun) TriggerEvent(eventURI string, event *hermes.NormalizedEve
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "dockerhub-provider"
+	app.Name = "nomios"
 	app.Authors = []cli.Author{{Name: "Alexei Ledenev", Email: "alexei@codefresh.io"}}
 	app.Version = version.HumanVersion
 	app.EnableBashCompletion = true
 	app.Usage = "handle DockerHub webhook payload"
 	app.UsageText = fmt.Sprintf(`Run DockerHub WebHook handler server.
 %s
-dockerhub-provider respects following environment variables:
+nomios respects following environment variables:
 
    - HERMES_SERVICE     - set the url to the Hermes service (default "hermes")
    
@@ -66,7 +66,7 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 					Value: 8080,
 				},
 			},
-			Usage: "start dockerhub-provider webhook handler server",
+			Usage: "start nomios webhook handler server",
 			Description: `Run DockerHub WebHook handler server. Process and send normalized event payload to the Codefresh Hermes trigger manager service to invoke associated Codefresh pipelines.
 			
 		Event URI Pattern: index.docker.io:<namespace>:<name>:<tag>:push`,

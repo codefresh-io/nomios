@@ -5,7 +5,7 @@
 [ -z "$BUILD_TIME" ] && BUILD_TIME=$(TZ=GMT date "+%Y-%m-%d_%H:%M_GMT")
 [ -z "$VCS_COMMIT_ID" ] && VCS_COMMIT_ID=$(git rev-parse --short HEAD 2>/dev/null)
 
-pkg="github.com/codefresh-io/dockerhub-provider/pkg"
+pkg="github.com/codefresh-io/nomios/pkg"
 
 echo "VERSION: $VERSION"
 echo "BUILD_TIME: $BUILD_TIME"
@@ -16,7 +16,7 @@ go_build() {
   [ -d "${DIST}" ] || mkdir -p "${DIST}"
   CGO_ENABLED=0 go build \
     -ldflags "-X $pkg/version.SemVer=${VERSION} -X $pkg/version.GitCommit=${VCS_COMMIT_ID} -X $pkg/version.BuildTime=${BUILD_TIME}" \
-    -o "${DIST}/dockerhub-provider" ./cmd/main.go
+    -o "${DIST}/nomios" ./cmd/main.go
 }
 
 go_build

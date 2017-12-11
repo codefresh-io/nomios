@@ -7,7 +7,7 @@ steps:
     description: create Nomios DockerHub Event Provider image with multi-stage build
     dockerfile: Dockerfile
     working-directory: ${{main_clone}}
-    image-name: codefreshio/dockerhub-provider
+    image-name: codefresh/nomios
     build_arguments:
       - VCS_COMMIT_ID=${{CF_REVISION}}
       - VCS_BRANCH_NAME=${{CF_BRANCH}}

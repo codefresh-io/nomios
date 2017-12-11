@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codefresh-io/dockerhub-provider/pkg/hermes"
+	"github.com/codefresh-io/nomios/pkg/hermes"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/mock"
 )

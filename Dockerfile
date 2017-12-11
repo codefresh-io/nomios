@@ -17,8 +17,8 @@
 FROM golang:1.9 AS godev
 
 # set working directory
-RUN mkdir -p /go/src/github.com/codefresh-io/dockerhub-provider
-WORKDIR /go/src/github.com/codefresh-io/dockerhub-provider
+RUN mkdir -p /go/src/github.com/codefresh-io/nomios
+WORKDIR /go/src/github.com/codefresh-io/nomios
 
 # copy sources
 COPY . .
@@ -59,17 +59,17 @@ FROM alpine:3.6
 
 ENV GIN_MODE=release
 
-COPY --from=builder /go/src/github.com/codefresh-io/dockerhub-provider/.bin/dockerhub-provider /dockerhub-provider
+COPY --from=builder /go/src/github.com/codefresh-io/nomios/.bin/nomios /nomios
 
-ENTRYPOINT ["/dockerhub-provider"]
+ENTRYPOINT ["/nomios"]
 CMD ["server"]
 
 ARG VCS_COMMIT_ID
 LABEL org.label-schema.vcs-ref=$VCS_COMMIT_ID \
-      org.label-schema.vcs-url="https://github.com/codefresh-io/dockerhub-provider" \
-      org.label-schema.description="dockerhub-provider is a DockerHub Event Provider" \
+      org.label-schema.vcs-url="https://github.com/codefresh-io/nomios" \
+      org.label-schema.description="nomios is a DockerHub Event Provider" \
       org.label-schema.vendor="Codefresh Inc." \
-      org.label-schema.url="https://github.com/codefresh-io/dockerhub-provider" \
-      org.label-schema.version="0.1.2" \
-      org.label-schema.docker.cmd="docker run -d --rm -p 80:8080 codefreshio/dockerhub-provider server" \
-      org.label-schema.docker.cmd.help="docker run -it --rm codefreshio/dockerhub-provider --help"
+      org.label-schema.url="https://github.com/codefresh-io/nomios" \
+      org.label-schema.version="0.2.0" \
+      org.label-schema.docker.cmd="docker run -d --rm -p 80:8080 codefreshio/nomios server" \
+      org.label-schema.docker.cmd.help="docker run -it --rm codefreshio/nomios --help"
