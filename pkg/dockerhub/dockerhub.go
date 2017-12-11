@@ -62,7 +62,7 @@ func (d *DockerHub) HandleWebhook(c *gin.Context) {
 	}
 
 	event := new(hermes.NormalizedEvent)
-	event.EventURI = constructEventURI(&payload)
+	eventURI := constructEventURI(&payload)
 	payloadJSON, err := json.Marshal(payload)
 	if err != nil {
 		log.Error(err)
@@ -84,7 +84,7 @@ func (d *DockerHub) HandleWebhook(c *gin.Context) {
 	event.Secret = c.Query("secret")
 
 	// invoke trigger
-	err = d.hermesSvc.TriggerEvent(event)
+	err = d.hermesSvc.TriggerEvent(eventURI, event)
 	if err != nil {
 		log.Error(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

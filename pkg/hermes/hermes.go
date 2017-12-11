@@ -11,7 +11,7 @@ import (
 type (
 	// Service Codefresh Service
 	Service interface {
-		TriggerEvent(event *NormalizedEvent) error
+		TriggerEvent(eventURI string, event *NormalizedEvent) error
 	}
 
 	// APIEndpoint Hermes API endpoint
@@ -21,7 +21,6 @@ type (
 
 	// NormalizedEvent normalized event: {event-uri, original-payload, secret, variables-map}
 	NormalizedEvent struct {
-		EventURI  string            `json:"event"`
 		Original  string            `json:"original,omitempty"`
 		Secret    string            `json:"secret,omitempty"`
 		Variables map[string]string `json:"variables,omitempty"`
@@ -35,16 +34,16 @@ func NewHermesEndpoint(url, token string) Service {
 }
 
 // TriggerEvent send normalized event to Hermes trigger-manager server
-func (api *APIEndpoint) TriggerEvent(event *NormalizedEvent) error {
-	log.Debugf("Triggering event '%s'", event.EventURI)
-	resp, err := api.endpoint.New().Post(fmt.Sprint("trigger/", event.EventURI)).BodyJSON(event).ReceiveSuccess(nil)
+func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) error {
+	log.Debugf("Triggering event '%s'", eventURI)
+	resp, err := api.endpoint.New().Post(fmt.Sprint("trigger/", eventURI)).BodyJSON(event).ReceiveSuccess(nil)
 	if err != nil {
 		log.Error(err)
 		return err
 	}
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("%s: error triggering event '%s'", resp.Status, event.EventURI)
+		return fmt.Errorf("%s: error triggering event '%s'", resp.Status, eventURI)
 	}
-	log.Debugf("Event '%s' triggered", event.EventURI)
+	log.Debugf("Event '%s' triggered", eventURI)
 	return nil
 }

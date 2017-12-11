@@ -18,8 +18,8 @@ type HermesMock struct {
 	mock.Mock
 }
 
-func (m *HermesMock) TriggerEvent(event *hermes.NormalizedEvent) error {
-	args := m.Called(event)
+func (m *HermesMock) TriggerEvent(eventURI string, event *hermes.NormalizedEvent) error {
+	args := m.Called(eventURI, event)
 	return args.Error(0)
 
 }
@@ -46,8 +46,8 @@ func TestContextBindWithQuery(t *testing.T) {
 
 	// setup mock
 	hermesMock := new(HermesMock)
+	eventURI := "index.docker.io:alexeiled:alpine-plus:latest:push"
 	event := hermes.NormalizedEvent{
-		EventURI: "index.docker.io:alexeiled:alpine-plus:latest:push",
 		Original: string(data),
 		Secret:   "SECRET",
 		Variables: map[string]string{
@@ -58,7 +58,7 @@ func TestContextBindWithQuery(t *testing.T) {
 			"pushed_at": time.Unix(1512920349, 0).Format(time.RFC3339),
 		},
 	}
-	hermesMock.On("TriggerEvent", &event).Return(nil)
+	hermesMock.On("TriggerEvent", eventURI, &event).Return(nil)
 
 	// bind dockerhub to hermes API endpoint
 	dockerhub := NewDockerHub(hermesMock)

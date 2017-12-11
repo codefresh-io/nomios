@@ -18,8 +18,8 @@ type HermesDryRun struct {
 }
 
 // TriggerEvent dry run version
-func (m *HermesDryRun) TriggerEvent(event *hermes.NormalizedEvent) error {
-	fmt.Println(event.EventURI)
+func (m *HermesDryRun) TriggerEvent(eventURI string, event *hermes.NormalizedEvent) error {
+	fmt.Println(eventURI)
 	fmt.Println("\tSecret: ", event.Secret)
 	fmt.Println("\tVariables:")
 	for k, v := range event.Variables {
