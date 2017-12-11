@@ -4,7 +4,7 @@ Codefresh *DockerHub Event Provider*, code named *Nomios* (son of *Hermes*) noti
 
 *Nomios* is a DockerHub webhook server. If properly configured (see bellow), it will receive an event for every `docker push` command. *Nomios* understand DockerHub webhook payload and generates "normalized* event that it sends to *Hermes* trigger manager.
 
-### Normalized event
+## Normalized event
 
 ```json
 {
@@ -21,7 +21,7 @@ Codefresh *DockerHub Event Provider*, code named *Nomios* (son of *Hermes*) noti
 }
 ```
 
-#### Fields
+### Fields
 
 - `event` - event URI in form `index.docker.io:<namespace>:<name>:<tag>:push`
 - `secret` - webhook secret
@@ -32,7 +32,7 @@ Codefresh *DockerHub Event Provider*, code named *Nomios* (son of *Hermes*) noti
 
 Configuring webhooks for DockerHub, requires manual work.
 
-To configure webhooks, visit `https://hub.docker.com/r/<USERNAME>/<REPOSITORY>/~/settings/webhooks/`. 
+To configure webhooks, visit `https://hub.docker.com/r/<USERNAME>/<REPOSITORY>/~/settings/webhooks/`.
 You can get more information, reading the official Docker [documentation](https://docs.docker.com/docker-hub/webhooks/)
 
 ### DockerHub webhook security
