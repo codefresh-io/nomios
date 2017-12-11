@@ -31,6 +31,19 @@ FROM godev AS tester
 # run tests
 RUN hack/test.sh
 
+# upload coverage reports to Codecov.io: pass CODECOV_TOKEN as build-arg
+ARG CODECOV_TOKEN
+# default codecov bash uploader (sometimes it's worth to use GitHub version or custom one, to avoid bugs)
+ARG CODECOV_BASH_URL=https://codecov.io/bash
+# set Codecov expected env
+ARG VCS_COMMIT_ID
+ARG VCS_BRANCH_NAME
+ARG VCS_SLUG
+ARG CI_BUILD_URL
+ARG CI_BUILD_ID
+RUN if [ "$CODECOV_TOKEN" != "" ]; then curl -s $CODECOV_BASH_URL | bash -s; fi
+
+
 #
 # ------ Go Builder ------
 #
@@ -40,7 +53,7 @@ FROM godev AS builder
 RUN hack/build.sh
 
 #
-# ------ Workflow Controller image ------
+# ------ Nomios DockerHub Event Provider image ------
 #
 FROM alpine:3.6
 
@@ -50,3 +63,13 @@ COPY --from=builder /go/src/github.com/codefresh-io/dockerhub-provider/.bin/dock
 
 ENTRYPOINT ["/dockerhub-provider"]
 CMD ["server"]
+
+ARG VCS_COMMIT_ID
+LABEL org.label-schema.vcs-ref=$VCS_COMMIT_ID \
+      org.label-schema.vcs-url="https://github.com/codefresh-io/dockerhub-provider" \
+      org.label-schema.description="dockerhub-provider is a DockerHub Event Provider" \
+      org.label-schema.vendor="Codefresh Inc." \
+      org.label-schema.url="https://github.com/codefresh-io/dockerhub-provider" \
+      org.label-schema.version="0.1.2" \
+      org.label-schema.docker.cmd="docker run -d --rm -p 80:8080 codefreshio/dockerhub-provider server" \
+      org.label-schema.docker.cmd.help="docker run -it --rm codefreshio/dockerhub-provider --help"
