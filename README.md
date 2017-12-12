@@ -1,5 +1,9 @@
 # Nomios - Codefresh DockerHub Event Provider
 
+ [![Go Report Card](https://goreportcard.com/badge/github.com/codefresh-io/nomios)](https://goreportcard.com/report/github.com/codefresh-io/nomios) [![codecov](https://codecov.io/gh/codefresh-io/nomios/branch/master/graph/badge.svg)](https://codecov.io/gh/codefresh-io/)nomios
+
+[![](https://images.microbadger.com/badges/image/codefresh/nomios.svg)](http://microbadger.com/images/codefresh/nomios) [![](https://images.microbadger.com/badges/commit/codefresh/nomios.svg)](https://microbadger.com/images/codefresh/nomios) [![Docker badge](https://img.shields.io/docker/pulls/codefresh/nomios.svg)](https://hub.docker.com/r/codefresh/nomios/)
+
 Codefresh *DockerHub Event Provider*, code named *Nomios* (son of *Hermes*) notifies [Hermes](https://github.com/codefresh-io/hermes) service when a new image pushed to a DockerHub.
 
 *Nomios* is a DockerHub webhook server. If properly configured (see bellow), it will receive an event for every `docker push` command. *Nomios* understand DockerHub webhook payload and generates "normalized* event that it sends to *Hermes* trigger manager.
@@ -45,14 +49,14 @@ When adding a new trigger into *Hermes* trigger manager server, specify some sec
 
 ## Running Nomios service
 
-Run the `dockerhub-provider server` command to start *Nomios* DockerHub event provider.
+Run the `nomios server` command to start *Nomios* DockerHub event provider.
 
 ```sh
 NAME:
-   dockerhub-provider server - start dockerhub-provider webhook handler server
+   nomios server - start Nomios DockerHub webhook handler server
 
 USAGE:
-   dockerhub-provider server [command options] [arguments...]
+   nomios server [command options] [arguments...]
 
 DESCRIPTION:
    Run DockerHub WebHook handler server. Process and send normalized event payload to the Codefresh Hermes trigger manager service to invoke associated Codefresh pipelines.
@@ -66,6 +70,6 @@ OPTIONS:
 
 `nomios` requires Go SDK to build.
 
-1. Clone this repository into `$GOPATH/src/github.com/codefresh-io/dockerhub-provider`
+1. Clone this repository into `$GOPATH/src/github.com/codefresh-io/nomios`
 1. Run `hack/build.sh` helper script or `go build cmd/main.go`%
 1. Run `hack/test.sh` to run all tests
