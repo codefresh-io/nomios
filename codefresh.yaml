@@ -2,12 +2,12 @@ version: '1.0'
 
 steps:
 
-  multistage-build:
+  multistage_build:
     type: build
     description: create Nomios DockerHub Event Provider image with multi-stage build
     dockerfile: Dockerfile
-    working-directory: ${{main_clone}}
-    image-name: codefresh/nomios
+    working_directory: ${{main_clone}}
+    image_name: codefresh/nomios
     build_arguments:
       - VCS_COMMIT_ID=${{CF_REVISION}}
       - VCS_BRANCH_NAME=${{CF_BRANCH}}
@@ -16,18 +16,18 @@ steps:
       - CI_BUILD_URL=${{CF_BUILD_URL}}
       - CODECOV_TOKEN=${{CODECOV_TOKEN}}
 
-  dockerhub-push:
+  dockerhub_push:
     type: push
-    candidate: ${{multistage-build}}
+    candidate: ${{multistage_build}}
     tag: stable
     when:
       branch:
         only:
           - master
 
-  dockerhub-push-others:
+  dockerhub_push_others:
     type: push
-    candidate: ${{multistage-build}}
+    candidate: ${{multistage_build}}
     tag: ${{CF_BRANCH}}
     when:
       branch:

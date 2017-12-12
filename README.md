@@ -1,6 +1,6 @@
 # Nomios - Codefresh DockerHub Event Provider
 
- [![Go Report Card](https://goreportcard.com/badge/github.com/codefresh-io/nomios)](https://goreportcard.com/report/github.com/codefresh-io/nomios) [![codecov](https://codecov.io/gh/codefresh-io/nomios/branch/master/graph/badge.svg)](https://codecov.io/gh/codefresh-io/)nomios
+[![Codefresh build status](https://g.codefresh.io/api/badges/build?repoOwner=codefresh-io&repoName=nomios&branch=master&pipelineName=nomios&accountName=codefresh-inc&type=cf-1)](https://g.codefresh.io/repositories/codefresh-io/nomios/builds?filter=trigger:build;branch:master;service:5a2f9ac17e524c00017a5970~nomios) [![Go Report Card](https://goreportcard.com/badge/github.com/codefresh-io/nomios)](https://goreportcard.com/report/github.com/codefresh-io/nomios) [![codecov](https://codecov.io/gh/codefresh-io/nomios/branch/master/graph/badge.svg)](https://codecov.io/gh/codefresh-io/nomios)
 
 [![](https://images.microbadger.com/badges/image/codefresh/nomios.svg)](http://microbadger.com/images/codefresh/nomios) [![](https://images.microbadger.com/badges/commit/codefresh/nomios.svg)](https://microbadger.com/images/codefresh/nomios) [![Docker badge](https://img.shields.io/docker/pulls/codefresh/nomios.svg)](https://hub.docker.com/r/codefresh/nomios/)
 
