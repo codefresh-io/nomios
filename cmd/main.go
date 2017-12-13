@@ -107,6 +107,7 @@ func before(c *cli.Context) error {
 
 // start trigger manager server
 func runServer(c *cli.Context) error {
+	fmt.Println()
 	fmt.Println(version.ASCIILogo)
 
 	// bind dockerhub to hermes API endpoint
