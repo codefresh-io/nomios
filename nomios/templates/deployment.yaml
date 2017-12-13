@@ -15,7 +15,7 @@ spec:
         app: {{ template "nomios.name" . }}
         release: {{ .Release.Name }}
         type: {{ .Values.event.type }}
-        kind: {{ .Values.evet.kind }}
+        kind: {{ .Values.event.kind }}
         action: {{ .Values.event.action }}
     spec:
       containers:

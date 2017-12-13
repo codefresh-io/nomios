@@ -11,6 +11,7 @@ event:
   type: registry
   kind: dockerhub
   action: push
+  
 service:
   name: nomios
   type: LoadBalancer
