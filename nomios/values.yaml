@@ -6,6 +6,11 @@ image:
   repository: codefresh/nomios
   tag: stable
   pullPolicy: IfNotPresent
+
+event:
+  type: registry
+  kind: dockerhub
+  action: push
 service:
   name: nomios
   type: LoadBalancer

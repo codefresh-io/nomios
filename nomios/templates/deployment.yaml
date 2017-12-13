@@ -14,6 +14,9 @@ spec:
       labels:
         app: {{ template "nomios.name" . }}
         release: {{ .Release.Name }}
+        type: {{ .Values.event.type }}
+        kind: {{ .Values.evet.kind }}
+        action: {{ .Values.event.action }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
