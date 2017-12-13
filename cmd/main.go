@@ -133,5 +133,5 @@ func getHealth(c *gin.Context) {
 }
 
 func getVersion(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"version": version.HumanVersion})
+	c.String(http.StatusOK, version.HumanVersion)
 }
