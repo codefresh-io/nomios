@@ -7,5 +7,7 @@
 # dep files
 Gopkg.*
 
-# packaged charts
+# helm charts
+nomios
 *.tgz
+index.yaml

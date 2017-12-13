@@ -10,3 +10,4 @@
 
 # packaged charts
 **/*.tgz
+index.yaml
