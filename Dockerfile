@@ -70,6 +70,6 @@ LABEL org.label-schema.vcs-ref=$VCS_COMMIT_ID \
       org.label-schema.description="nomios is a DockerHub Event Provider" \
       org.label-schema.vendor="Codefresh Inc." \
       org.label-schema.url="https://github.com/codefresh-io/nomios" \
-      org.label-schema.version="0.2.0" \
+      org.label-schema.version="0.2.1" \
       org.label-schema.docker.cmd="docker run -d --rm -p 80:8080 codefreshio/nomios server" \
       org.label-schema.docker.cmd.help="docker run -it --rm codefreshio/nomios --help"
