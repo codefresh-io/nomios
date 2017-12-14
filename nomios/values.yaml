@@ -11,12 +11,16 @@ event:
   type: registry
   kind: dockerhub
   action: push
+
+# Hermes Service name - deafult to "<release>-hermes"
+# hermesService: "..."
   
 service:
   name: nomios
   type: LoadBalancer
   externalPort: 80
   internalPort: 8080
+
 ingress:
   enabled: false
   # Used to create an Ingress record.

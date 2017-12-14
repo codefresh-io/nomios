@@ -24,14 +24,25 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
+          env:
+            - name: HERMES_SERVICE
+              {{- if .Values.hermesService }}
+              value: {{ .Values.hermesService }}
+              {{- else }}
+              value: {{ template "hermes.fullname" . }}
+              {{- end }}
           livenessProbe:
             httpGet:
               path: /health
               port: {{ .Values.service.internalPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 60
           readinessProbe:
             httpGet:
-              path: /
+              path: /version
               port: {{ .Values.service.internalPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 60
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
