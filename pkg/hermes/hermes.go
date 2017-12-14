@@ -26,6 +26,7 @@ type (
 		Variables map[string]string `json:"variables,omitempty"`
 	}
 
+	// ServiceError hermes error
 	ServiceError struct {
 		Status int    `json:"status"`
 		Title  string `json:"message"`

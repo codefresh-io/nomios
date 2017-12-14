@@ -26,11 +26,7 @@ spec:
             - containerPort: {{ .Values.service.internalPort }}
           env:
             - name: HERMES_SERVICE
-              {{- if .Values.hermesService }}
-              value: {{ .Values.hermesService }}
-              {{- else }}
-              value: {{ template "hermes.fullname" . }}
-              {{- end }}
+              value: {{ .Values.hermesService | default (printf "%s-hermes" .Release.Name) }}
           livenessProbe:
             httpGet:
               path: /health

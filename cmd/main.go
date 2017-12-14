@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/codefresh-io/nomios/pkg/dockerhub"
 	"github.com/codefresh-io/nomios/pkg/hermes"
@@ -116,7 +117,12 @@ func runServer(c *cli.Context) error {
 	if c.Bool("dry-run") {
 		hub = dockerhub.NewDockerHub(&HermesDryRun{})
 	} else {
-		hub = dockerhub.NewDockerHub(hermes.NewHermesEndpoint(c.String("hermes"), c.String("hermes")))
+		// add http protocol, if missing
+		hermesSvcName := c.String("hermes")
+		if !strings.HasPrefix(hermesSvcName, "http://") {
+			hermesSvcName = "http://" + hermesSvcName
+		}
+		hub = dockerhub.NewDockerHub(hermes.NewHermesEndpoint(hermesSvcName, c.String("token")))
 	}
 
 	// setup gin router
