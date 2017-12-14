@@ -75,8 +75,9 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 	}
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
-			Name:  "debug",
-			Usage: "enable debug mode with verbose logging",
+			Name:   "debug",
+			Usage:  "enable debug mode with verbose logging",
+			EnvVar: "DEBUG_NOMIOS",
 		},
 		cli.BoolFlag{
 			Name:  "dry-run",

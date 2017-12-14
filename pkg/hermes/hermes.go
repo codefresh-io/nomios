@@ -25,7 +25,20 @@ type (
 		Secret    string            `json:"secret,omitempty"`
 		Variables map[string]string `json:"variables,omitempty"`
 	}
+
+	ServiceError struct {
+		Status int    `json:"status"`
+		Title  string `json:"message"`
+		Body   string `json:"error"`
+	}
 )
+
+// NewNormalizedEvent init NormalizedEvent struct
+func NewNormalizedEvent() *NormalizedEvent {
+	var event NormalizedEvent
+	event.Variables = make(map[string]string)
+	return &event
+}
 
 // NewHermesEndpoint create new Hermes API endpoint from url and API token
 func NewHermesEndpoint(url, token string) Service {
@@ -36,7 +49,9 @@ func NewHermesEndpoint(url, token string) Service {
 // TriggerEvent send normalized event to Hermes trigger-manager server
 func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) error {
 	log.Debugf("Triggering event '%s'", eventURI)
-	resp, err := api.endpoint.New().Post(fmt.Sprint("trigger/", eventURI)).BodyJSON(event).ReceiveSuccess(nil)
+	var runs []string
+	var failure ServiceError
+	resp, err := api.endpoint.New().Post(fmt.Sprint("trigger/", eventURI)).BodyJSON(event).Receive(&runs, &failure)
 	if err != nil {
 		log.Error(err)
 		return err
@@ -45,5 +60,6 @@ func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) er
 		return fmt.Errorf("%s: error triggering event '%s'", resp.Status, eventURI)
 	}
 	log.Debugf("Event '%s' triggered", eventURI)
+	log.Debugf("Running pipelines: %v", runs)
 	return nil
 }

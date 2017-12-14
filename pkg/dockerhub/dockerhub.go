@@ -49,7 +49,7 @@ func NewDockerHub(svc hermes.Service) *DockerHub {
 }
 
 func constructEventURI(payload *webhookPayload) string {
-	return fmt.Sprintf("index.docker.io:%s:%s:%s:push", payload.Repository.Namespace, payload.Repository.Name, payload.PushData.Tag)
+	return fmt.Sprintf("index.docker.io:%s:%s:push", payload.Repository.Namespace, payload.Repository.Name)
 }
 
 // HandleWebhook handle DockerHub webhook
@@ -61,7 +61,7 @@ func (d *DockerHub) HandleWebhook(c *gin.Context) {
 		return
 	}
 
-	event := new(hermes.NormalizedEvent)
+	event := hermes.NewNormalizedEvent()
 	eventURI := constructEventURI(&payload)
 	payloadJSON, err := json.Marshal(payload)
 	if err != nil {
@@ -73,7 +73,6 @@ func (d *DockerHub) HandleWebhook(c *gin.Context) {
 	event.Original = string(payloadJSON)
 
 	// get image push details
-	event.Variables = make(map[string]string)
 	event.Variables["namespace"] = payload.Repository.Namespace
 	event.Variables["name"] = payload.Repository.Name
 	event.Variables["tag"] = payload.PushData.Tag
