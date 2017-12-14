@@ -59,6 +59,8 @@ FROM alpine:3.6
 
 ENV GIN_MODE=release
 
+RUN apk add --no-cache ca-certificates
+
 COPY --from=builder /go/src/github.com/codefresh-io/nomios/.bin/nomios /usr/local/bin/nomios
 
 ENTRYPOINT ["/usr/local/bin/nomios"]
