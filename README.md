@@ -10,9 +10,10 @@ Codefresh *DockerHub Event Provider*, code named *Nomios* (son of *Hermes*) noti
 
 ## Normalized event
 
+POST ${HERMES_SERVICE}/trigger/${event}
+
 ```json
 {
-    "event": "index.docker.io:<namespace>:<name>:<tag>:push",
     "secret": "webhook secret",
     "original": "<original DockerHub webhook payload",
     "variables": {
@@ -27,10 +28,10 @@ Codefresh *DockerHub Event Provider*, code named *Nomios* (son of *Hermes*) noti
 
 ### Fields
 
-- `event` - event URI in form `index.docker.io:<namespace>:<name>:<tag>:push`
-- `secret` - webhook secret
-- `original` - original DockerHub `push` event JSON payload
-- `variables` - set of variables, extracted from the event payload: `namespace`, `name`, `tag`, `pusher`, `pushed_at`
+- URL: `event` - event URI in form `index.docker.io:<namespace>:<name>:<tag>:push`
+- PAYLOAD: `secret` - webhook secret
+- PAYLOAD: `original` - original DockerHub `push` event JSON payload
+- PAYLOAD: `variables` - set of variables, extracted from the event payload: `namespace`, `name`, `tag`, `pusher`, `pushed_at`
 
 ## Configure DockerHub webhook
 
