@@ -70,7 +70,7 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 			Usage: "start nomios webhook handler server",
 			Description: `Run DockerHub WebHook handler server. Process and send normalized event payload to the Codefresh Hermes trigger manager service to invoke associated Codefresh pipelines.
 			
-		Event URI Pattern: index.docker.io:<namespace>:<name>:<tag>:push`,
+		Event URI Pattern: index.docker.io:<namespace>:<name>:push`,
 			Action: runServer,
 		},
 	}
