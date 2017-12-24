@@ -1,4 +1,4 @@
 apiVersion: v1
 description: Nomios - Codefresh DockerHub Event Provider
 name: nomios
-version: 0.1.2
+version: 0.1.3

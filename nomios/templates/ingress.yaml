@@ -1,4 +1,5 @@
 {{- if .Values.ingress.enabled -}}
+{{- $servicePath := include "nomios.fullname" . -}}
 {{- $serviceName := include "nomios.fullname" . -}}
 {{- $servicePort := .Values.service.externalPort -}}
 apiVersion: extensions/v1beta1
@@ -20,7 +21,7 @@ spec:
     - host: {{ $host }}
       http:
         paths:
-          - path: /
+          - path: /{{ $servicePath }}
             backend:
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
