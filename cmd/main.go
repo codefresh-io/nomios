@@ -127,8 +127,11 @@ func runServer(c *cli.Context) error {
 
 	// setup gin router
 	router := gin.Default()
+	router.POST("/nomios/dockerhub", hub.HandleWebhook)
 	router.POST("/dockerhub", hub.HandleWebhook)
+	router.GET("/nomios/health", getHealth)
 	router.GET("/health", getHealth)
+	router.GET("/nomios/version", getVersion)
 	router.GET("/version", getVersion)
 	router.GET("/", getVersion)
 	router.Run(fmt.Sprintf(":%d", c.Int("port")))

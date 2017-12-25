@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: codefresh/nomios
-  tag: 0.2.3
+  tag: 0.2.4
   pullPolicy: IfNotPresent
 
 event:
@@ -25,7 +25,7 @@ ingress:
   enabled: true
   # Used to create an Ingress record
   hosts:
-    - "*"
+    - "index.docker.io"
   annotations:
     # GCE Ingress Controller
     kubernetes.io/ingress.class: "gce"
