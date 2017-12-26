@@ -16,9 +16,10 @@ metadata:
     {{- end }}
 spec:
   rules:
-    - http:
+    - host: {{ .Values.ingress.host | quote }}
+      http:
         paths:
-          - path: /nomios/*
+          - path: {{ .Values.ingress.path | quote }}
             backend:
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}

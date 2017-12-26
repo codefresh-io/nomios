@@ -23,6 +23,15 @@ service:
 
 ingress:
   enabled: true
+  # specify host
+  # host: triggers.dev.codefresh.io
+
+  #specify path
+  # Important!!!
+  # - GCE requires * at the end
+  # - Nginx requires no star
+  path: /nomios/*
+  
   # Used to create an Ingress record
   annotations:
     # GCE Ingress Controller (default)
