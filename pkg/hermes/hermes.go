@@ -50,7 +50,13 @@ func NewHermesEndpoint(url, token string) Service {
 // TriggerEvent send normalized event to Hermes trigger-manager server
 func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) error {
 	log.Debugf("Triggering event '%s'", eventURI)
-	var runs []string
+	// runs response
+	type PipelineRun struct {
+		ID    string `json:"id"`
+		Error error  `json:"error, omitempty"`
+	}
+	runs := new([]PipelineRun)
+
 	var failure ServiceError
 	resp, err := api.endpoint.New().Post(fmt.Sprint("trigger/", eventURI)).BodyJSON(event).Receive(&runs, &failure)
 	if err != nil {
