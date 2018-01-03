@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: codefresh/nomios
-  tag: 0.2.5
+  tag: 0.3.0
   pullPolicy: IfNotPresent
 
 event:
@@ -27,7 +27,7 @@ ingress:
   # host: triggers.dev.codefresh.io
 
   #specify path
-  # Important!!!
+  # IMPORTANT!!!
   # - GCE requires * at the end
   # - Nginx requires no star
   path: /nomios/*

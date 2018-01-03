@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/codefresh-io/nomios/pkg/dockerhub"
+	"github.com/codefresh-io/nomios/pkg/event"
 	"github.com/codefresh-io/nomios/pkg/hermes"
 	"github.com/codefresh-io/nomios/pkg/version"
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,9 @@ import (
 // HermesDryRun dry run stub
 type HermesDryRun struct {
 }
+
+// PublicDNS public dns name for Codefresh environment
+var PublicDNS string
 
 // TriggerEvent dry run version
 func (m *HermesDryRun) TriggerEvent(eventURI string, event *hermes.NormalizedEvent) error {
@@ -60,6 +64,12 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 					Usage:  "Codefresh Hermes API token",
 					Value:  "TOKEN",
 					EnvVar: "HERMES_TOKEN",
+				},
+				cli.StringFlag{
+					Name:   "dns, n",
+					Usage:  "Public DNS name for the Codefresh environment",
+					Value:  "https://g.codefresh.io",
+					EnvVar: "PUBLIC_DNS_NAME",
 				},
 				cli.IntFlag{
 					Name:  "port",
@@ -125,10 +135,17 @@ func runServer(c *cli.Context) error {
 		hub = dockerhub.NewDockerHub(hermes.NewHermesEndpoint(hermesSvcName, c.String("token")))
 	}
 
+	// get public DNS name
+	PublicDNS = c.String("dns")
+
 	// setup gin router
 	router := gin.Default()
 	router.POST("/nomios/dockerhub", hub.HandleWebhook)
 	router.POST("/dockerhub", hub.HandleWebhook)
+	// event info route
+	router.GET("/nomios/event-info/:uri", getEventInfo)
+	router.GET("/event-info/:uri", getEventInfo)
+	// status routes
 	router.GET("/nomios/health", getHealth)
 	router.GET("/health", getHealth)
 	router.GET("/nomios/version", getVersion)
@@ -136,6 +153,16 @@ func runServer(c *cli.Context) error {
 	router.GET("/", getVersion)
 	router.Run(fmt.Sprintf(":%d", c.Int("port")))
 	return nil
+}
+
+func getEventInfo(c *gin.Context) {
+	info, err := event.GetEventInfo(PublicDNS, c.Param("uri"), c.Param("secret"))
+	if err != nil {
+		log.Error(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, info)
 }
 
 func getHealth(c *gin.Context) {
