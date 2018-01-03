@@ -143,8 +143,8 @@ func runServer(c *cli.Context) error {
 	router.POST("/nomios/dockerhub", hub.HandleWebhook)
 	router.POST("/dockerhub", hub.HandleWebhook)
 	// event info route
-	router.GET("/nomios/event-info/:uri", getEventInfo)
-	router.GET("/event-info/:uri", getEventInfo)
+	router.GET("/nomios/event-info/:uri/:secret", getEventInfo)
+	router.GET("/event-info/:uri/:secret", getEventInfo)
 	// status routes
 	router.GET("/nomios/health", getHealth)
 	router.GET("/health", getHealth)
