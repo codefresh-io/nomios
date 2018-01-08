@@ -139,12 +139,13 @@ func runServer(c *cli.Context) error {
 	PublicDNS = c.String("dns")
 
 	// setup gin router
-	router := gin.Default()
-	router.POST("/nomios/dockerhub", hub.HandleWebhook)
-	router.POST("/dockerhub", hub.HandleWebhook)
+	router := gin.New()
+	router.Use(gin.Recovery())
+	router.POST("/nomios/dockerhub", gin.Logger(), hub.HandleWebhook)
+	router.POST("/dockerhub", gin.Logger(), hub.HandleWebhook)
 	// event info route
-	router.GET("/nomios/event-info/:uri/:secret", getEventInfo)
-	router.GET("/event-info/:uri/:secret", getEventInfo)
+	router.GET("/nomios/event-info/:uri/:secret", gin.Logger(), getEventInfo)
+	router.GET("/event-info/:uri/:secret", gin.Logger(), getEventInfo)
 	// status routes
 	router.GET("/nomios/health", getHealth)
 	router.GET("/health", getHealth)
