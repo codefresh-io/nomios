@@ -1,6 +1,7 @@
 package hermes
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -28,9 +29,9 @@ type (
 
 	// ServiceError hermes error
 	ServiceError struct {
-		Status int    `json:"status"`
-		Title  string `json:"message"`
-		Body   string `json:"error"`
+		Status int    `json:"status,omitempty"`
+		Title  string `json:"message,omitempty"`
+		Body   string `json:"error,omitempty"`
 	}
 )
 
@@ -59,6 +60,7 @@ func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) er
 	runs := new([]PipelineRun)
 
 	var failure ServiceError
+	log.WithField("event", *event).Debug("Sending normalized event payload")
 	resp, err := api.endpoint.New().Post(fmt.Sprint("trigger/", eventURI)).BodyJSON(event).Receive(&runs, &failure)
 	if err != nil {
 		log.WithError(err).Error("Failed to invoke Hermes POST /trigger/ API")
@@ -71,4 +73,12 @@ func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) er
 	log.WithField("event-uri", eventURI).Debug("Event triggered")
 	log.WithField("runs", runs).Debug("Running pipelines")
 	return nil
+}
+
+func (e NormalizedEvent) String() string {
+	d, err := json.Marshal(&e)
+	if err != nil {
+		log.WithError(err).Error("Failed to convert NormalizedEvent to JSON")
+	}
+	return string(d)
 }
