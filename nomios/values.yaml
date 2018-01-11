@@ -4,9 +4,13 @@
 replicaCount: 1
 image:
   repository: codefresh/nomios
-  tag: 0.3.0
+  tag: 0.3.1
   pullPolicy: IfNotPresent
 
+# set log level
+logLevel: debug
+
+# set event handler type and kind
 event:
   type: registry
   kind: dockerhub

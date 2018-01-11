@@ -43,13 +43,14 @@ func NewNormalizedEvent() *NormalizedEvent {
 
 // NewHermesEndpoint create new Hermes API endpoint from url and API token
 func NewHermesEndpoint(url, token string) Service {
-	endpoint := sling.New().Base(url).Set("x-access-token", token)
+	log.WithField("hermes url", url).Debug("Binding to Hermes service")
+	endpoint := sling.New().Base(url).Set("Authorization", token)
 	return &APIEndpoint{endpoint}
 }
 
 // TriggerEvent send normalized event to Hermes trigger-manager server
 func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) error {
-	log.Debugf("Triggering event '%s'", eventURI)
+	log.WithField("event-uri", eventURI).Debug("Triggering event")
 	// runs response
 	type PipelineRun struct {
 		ID    string `json:"id"`
@@ -60,13 +61,14 @@ func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) er
 	var failure ServiceError
 	resp, err := api.endpoint.New().Post(fmt.Sprint("trigger/", eventURI)).BodyJSON(event).Receive(&runs, &failure)
 	if err != nil {
-		log.Error(err)
+		log.WithError(err).Error("Failed to invoke Hermes POST /trigger/ API")
 		return err
 	}
 	if resp.StatusCode != http.StatusOK {
+		log.WithField("http status", resp.Status).Error("Herems POST /trigger/ API failed")
 		return fmt.Errorf("%s: error triggering event '%s'", resp.Status, eventURI)
 	}
-	log.Debugf("Event '%s' triggered", eventURI)
-	log.Debugf("Running pipelines: %v", runs)
+	log.WithField("event-uri", eventURI).Debug("Event triggered")
+	log.WithField("runs", runs).Debug("Running pipelines")
 	return nil
 }

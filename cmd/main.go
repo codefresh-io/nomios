@@ -54,7 +54,7 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 			Name: "server",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:   "hermes, hm",
+					Name:   "hermes",
 					Usage:  "Codefresh Hermes service",
 					Value:  "http://hermes/",
 					EnvVar: "HERMES_SERVICE",
@@ -85,10 +85,11 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 		},
 	}
 	app.Flags = []cli.Flag{
-		cli.BoolFlag{
-			Name:   "debug",
-			Usage:  "enable debug mode with verbose logging",
-			EnvVar: "DEBUG_NOMIOS",
+		cli.StringFlag{
+			Name:   "log-level, l",
+			Usage:  "set log level (debug, info, warning(*), error, fatal, panic)",
+			Value:  "warning",
+			EnvVar: "LOG_LEVEL",
 		},
 		cli.BoolFlag{
 			Name:  "dry-run",
@@ -106,8 +107,21 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 
 func before(c *cli.Context) error {
 	// set debug log level
-	if c.GlobalBool("debug") {
+	switch level := c.GlobalString("log-level"); level {
+	case "debug", "DEBUG":
 		log.SetLevel(log.DebugLevel)
+	case "info", "INFO":
+		log.SetLevel(log.InfoLevel)
+	case "warning", "WARNING":
+		log.SetLevel(log.WarnLevel)
+	case "error", "ERROR":
+		log.SetLevel(log.ErrorLevel)
+	case "fatal", "FATAL":
+		log.SetLevel(log.FatalLevel)
+	case "panic", "PANIC":
+		log.SetLevel(log.PanicLevel)
+	default:
+		log.SetLevel(log.WarnLevel)
 	}
 	// set log formatter to JSON
 	if c.GlobalBool("json") {
@@ -159,7 +173,6 @@ func runServer(c *cli.Context) error {
 func getEventInfo(c *gin.Context) {
 	info, err := event.GetEventInfo(PublicDNS, c.Param("uri"), c.Param("secret"))
 	if err != nil {
-		log.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

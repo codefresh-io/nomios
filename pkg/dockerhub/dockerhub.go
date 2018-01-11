@@ -54,9 +54,10 @@ func constructEventURI(payload *webhookPayload) string {
 
 // HandleWebhook handle DockerHub webhook
 func (d *DockerHub) HandleWebhook(c *gin.Context) {
+	log.Debug("Got Docker Hub webhook event")
 	payload := webhookPayload{}
 	if err := c.BindJSON(&payload); err != nil {
-		log.Error(err)
+		log.WithError(err).Error("Failed to bind payload JSON to expected structure")
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -65,7 +66,7 @@ func (d *DockerHub) HandleWebhook(c *gin.Context) {
 	eventURI := constructEventURI(&payload)
 	payloadJSON, err := json.Marshal(payload)
 	if err != nil {
-		log.Error(err)
+		log.WithError(err).Error("Failed to covert webhook payload structure to JSON")
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -85,7 +86,7 @@ func (d *DockerHub) HandleWebhook(c *gin.Context) {
 	// invoke trigger
 	err = d.hermesSvc.TriggerEvent(eventURI, event)
 	if err != nil {
-		log.Error(err)
+		log.WithError(err).Error("Failed to trigger event pipelines")
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
