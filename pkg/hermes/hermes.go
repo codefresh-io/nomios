@@ -1,7 +1,6 @@
 package hermes
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -53,25 +52,21 @@ func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) er
 	runs := new([]PipelineRun)
 
 	// invoke hermes trigger
-	log.WithField("event", *event).Debug("Sending normalized event payload")
-	resp, err := api.endpoint.New().Post(fmt.Sprint("trigger/", eventURI)).BodyJSON(event).ReceiveSuccess(&runs)
+	log.WithFields(log.Fields{
+		"secret":   event.Secret,
+		"vars":     event.Variables,
+		"original": event.Original,
+	}).Debug("Sending normalized event payload")
+	resp, err := api.endpoint.New().Post(fmt.Sprint("triggers/", eventURI)).BodyJSON(event).ReceiveSuccess(&runs)
 	if err != nil {
-		log.WithError(err).Error("Failed to invoke Hermes POST /trigger/ API")
+		log.WithError(err).Error("Failed to invoke Hermes POST /triggers/ API")
 		return err
 	}
 	if resp.StatusCode != http.StatusOK {
-		log.WithField("http status", resp.Status).Error("Herems POST /trigger/ API failed")
+		log.WithField("http status", resp.Status).Error("Herems POST /triggers/ API failed")
 		return fmt.Errorf("%s: error triggering event '%s'", resp.Status, eventURI)
 	}
 	log.WithField("event-uri", eventURI).Debug("Event triggered")
 	log.WithField("runs", runs).Debug("Running pipelines")
 	return nil
-}
-
-func (e NormalizedEvent) String() string {
-	d, err := json.Marshal(&e)
-	if err != nil {
-		log.WithError(err).Error("Failed to convert NormalizedEvent to JSON")
-	}
-	return string(d)
 }
