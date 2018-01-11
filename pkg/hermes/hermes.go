@@ -26,13 +26,6 @@ type (
 		Secret    string            `json:"secret,omitempty"`
 		Variables map[string]string `json:"variables,omitempty"`
 	}
-
-	// ServiceError hermes error
-	ServiceError struct {
-		Status int    `json:"status,omitempty"`
-		Title  string `json:"message,omitempty"`
-		Body   string `json:"error,omitempty"`
-	}
 )
 
 // NewNormalizedEvent init NormalizedEvent struct
@@ -59,9 +52,9 @@ func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) er
 	}
 	runs := new([]PipelineRun)
 
-	var failure ServiceError
+	// invoke hermes trigger
 	log.WithField("event", *event).Debug("Sending normalized event payload")
-	resp, err := api.endpoint.New().Post(fmt.Sprint("trigger/", eventURI)).BodyJSON(event).Receive(&runs, &failure)
+	resp, err := api.endpoint.New().Post(fmt.Sprint("trigger/", eventURI)).BodyJSON(event).ReceiveSuccess(&runs)
 	if err != nil {
 		log.WithError(err).Error("Failed to invoke Hermes POST /trigger/ API")
 		return err
