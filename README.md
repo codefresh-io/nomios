@@ -28,7 +28,7 @@ POST ${HERMES_SERVICE}/trigger/${event}
 
 ### Fields
 
-- URL: `event` - event URI in form `index.docker.io:<namespace>:<name>:push`
+- URL: `event` - event URI in form `registry:dockerhub:<namespace>:<name>:push`
 - PAYLOAD: `secret` - webhook secret
 - PAYLOAD: `original` - original DockerHub `push` event JSON payload
 - PAYLOAD: `variables` - set of variables, extracted from the event payload: `namespace`, `name`, `tag`, `pusher`, `pushed_at`

@@ -22,7 +22,7 @@ type (
 	}
 )
 
-const validURI = `^index\.docker\.io:[a-z0-9_-]+:[a-z0-9_-]+:push$`
+const validURI = `^registry:dockerhub:[a-z0-9_-]+:[a-z0-9_-]+:push$`
 
 // compiled validator regexp
 var validator, _ = regexp.Compile(validURI)

@@ -6,6 +6,7 @@ import (
 
 func TestGetEventInfo(t *testing.T) {
 	type args struct {
+		dns    string
 		uri    string
 		secret string
 	}
@@ -18,12 +19,13 @@ func TestGetEventInfo(t *testing.T) {
 		{
 			name: "test happy path",
 			args: args{
-				uri:    "index.docker.io:codefresh:fortune:push",
+				dns:    "https://public-ip",
+				uri:    "registry:dockerhub:codefresh:fortune:push",
 				secret: "123456789",
 			},
 			want: &Info{
 				Description: "Docker Hub codefresh/fortune push event",
-				Endpoint:    "https://g.codefresh.io/nomios/dockerhub?secret=123456789",
+				Endpoint:    "https://public-ip/nomios/dockerhub?secret=123456789",
 				Status:      "active",
 			},
 			wantErr: false,
@@ -31,7 +33,8 @@ func TestGetEventInfo(t *testing.T) {
 		{
 			name: "test bad event uri",
 			args: args{
-				uri:    "index.docker.io:unexpected-format:push",
+				dns:    "https://public-ip",
+				uri:    "registry:dockerhub:unexpected-format:push",
 				secret: "123456789",
 			},
 			want:    nil,
@@ -40,7 +43,7 @@ func TestGetEventInfo(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := GetEventInfo(tt.args.uri, tt.args.secret)
+			got, err := GetEventInfo(tt.args.dns, tt.args.uri, tt.args.secret)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetEventInfo() error = %v, wantErr %v", err, tt.wantErr)
 				return
