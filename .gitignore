@@ -11,3 +11,4 @@
 # packaged charts
 **/*.tgz
 index.yaml
+/.gtm/

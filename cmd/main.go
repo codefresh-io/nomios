@@ -158,8 +158,13 @@ func runServer(c *cli.Context) error {
 	router.POST("/nomios/dockerhub", gin.Logger(), hub.HandleWebhook)
 	router.POST("/dockerhub", gin.Logger(), hub.HandleWebhook)
 	// event info route
-	router.GET("/nomios/event-info/:uri/:secret", gin.Logger(), getEventInfo)
-	router.GET("/event-info/:uri/:secret", gin.Logger(), getEventInfo)
+	router.GET("/nomios/event/:uri/:secret", gin.Logger(), getEventInfo)
+	router.GET("/event/:uri/:secret", gin.Logger(), getEventInfo)
+	// subscribe/unsubscribe route
+	router.POST("/nomios/event/:uri/:secret/:credentials", gin.Logger(), subscribeToEvent)
+	router.POST("/event/:uri/:secret/:credentials", gin.Logger(), subscribeToEvent)
+	router.DELETE("/nomios/event/:uri/:credentials", gin.Logger(), unsubscribeFromEvent)
+	router.DELETE("/event/:uri/:credentials", gin.Logger(), unsubscribeFromEvent)
 	// status routes
 	router.GET("/nomios/health", getHealth)
 	router.GET("/health", getHealth)
@@ -177,6 +182,26 @@ func getEventInfo(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, info)
+}
+
+func subscribeToEvent(c *gin.Context) {
+	// info, err := event.Subscribe(PublicDNS, c.Param("uri"), c.Param("secret"), c.Param("credentials"))
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	// c.JSON(http.StatusOK, info)
+	c.Status(http.StatusNotImplemented)
+}
+
+func unsubscribeFromEvent(c *gin.Context) {
+	// info, err := event.Unsubscribe(PublicDNS, c.Param("uri"), c.Param("credentials"))
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	// c.JSON(http.StatusOK, info)
+	c.Status(http.StatusNotImplemented)
 }
 
 func getHealth(c *gin.Context) {
