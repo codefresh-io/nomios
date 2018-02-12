@@ -40,9 +40,9 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 	// split uri
 	s := strings.Split(uri, ":")
 	// dockerhub repository 1st
-	repo := s[1]
+	repo := s[2]
 	// dockerhub image 2nd
-	image := s[2]
+	image := s[3]
 
 	// format info
 	info := new(Info)
