@@ -76,11 +76,15 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 					Usage: "TCP port for the dockerhub provider server",
 					Value: 8080,
 				},
+				cli.BoolFlag{
+					Name:  "dry-run",
+					Usage: "do not execute commands, just log",
+				},
 			},
 			Usage: "start nomios webhook handler server",
 			Description: `Run DockerHub WebHook handler server. Process and send normalized event payload to the Codefresh Hermes trigger manager service to invoke associated Codefresh pipelines.
 			
-		Event URI Pattern: index.docker.io:<namespace>:<name>:push`,
+		Event URI Pattern: registry:dockerhub:{{namespace}}:{{name}}:push`,
 			Action: runServer,
 		},
 	}
@@ -90,10 +94,6 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 			Usage:  "set log level (debug, info, warning(*), error, fatal, panic)",
 			Value:  "warning",
 			EnvVar: "LOG_LEVEL",
-		},
-		cli.BoolFlag{
-			Name:  "dry-run",
-			Usage: "do not execute commands, just log",
 		},
 		cli.BoolFlag{
 			Name:  "json",
