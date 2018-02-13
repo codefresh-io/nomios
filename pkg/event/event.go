@@ -2,6 +2,7 @@ package event
 
 import (
 	"fmt"
+	"net/url"
 	"regexp"
 	"strings"
 
@@ -47,7 +48,17 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 	// format info
 	info := new(Info)
 	info.Description = fmt.Sprintf("Docker Hub %s/%s push event", repo, image)
-	info.Endpoint = fmt.Sprintf("%s/nomios/dockerhub?secret=%s", publicDNS, secret)
+	// handle endpoint url
+	u, err := url.Parse(publicDNS)
+	if err != nil {
+		log.WithError(err).WithField("dns", publicDNS).Warn("failed to parse public dns")
+	} else {
+		q := u.Query()
+		q.Set("secret", secret)
+		u.Path = "nomios/dockerhub" + u.Path
+		u.RawQuery = q.Encode()
+		info.Endpoint = u.String()
+	}
 	info.Status = "active"
 	info.Help = fmt.Sprintf(`Docker Hub webhooks fire when an image is built in, pushed or a new tag is added to, your repository.
 
