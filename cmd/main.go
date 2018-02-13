@@ -56,7 +56,7 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 				cli.StringFlag{
 					Name:   "hermes",
 					Usage:  "Codefresh Hermes service",
-					Value:  "http://hermes/",
+					Value:  "http://local.codefresh.io:9011",
 					EnvVar: "HERMES_SERVICE",
 				},
 				cli.StringFlag{
@@ -74,7 +74,7 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 				cli.IntFlag{
 					Name:  "port",
 					Usage: "TCP port for the dockerhub provider server",
-					Value: 8080,
+					Value: 10001,
 				},
 				cli.BoolFlag{
 					Name:  "dry-run",
