@@ -72,9 +72,10 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 					EnvVar: "PUBLIC_DNS_NAME",
 				},
 				cli.IntFlag{
-					Name:  "port",
-					Usage: "TCP port for the dockerhub provider server",
-					Value: 10001,
+					Name:   "port",
+					Usage:  "TCP port for the dockerhub provider server",
+					Value:  10001,
+					EnvVar: "PORT",
 				},
 				cli.BoolFlag{
 					Name:  "dry-run",
