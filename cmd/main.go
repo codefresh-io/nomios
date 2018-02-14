@@ -174,7 +174,7 @@ func runServer(c *cli.Context) error {
 	router.GET("/", getVersion)
 
 	port := c.Int("port")
-	log.WithField("port", port).Debug("starting hermes server")
+	log.WithField("port", port).Debug("starting nomios server")
 	return router.Run(fmt.Sprintf(":%d", port))
 }
 
