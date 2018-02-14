@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/codefresh-io/nomios/pkg/dockerhub"
@@ -172,8 +173,10 @@ func runServer(c *cli.Context) error {
 	router.GET("/nomios/version", getVersion)
 	router.GET("/version", getVersion)
 	router.GET("/", getVersion)
-	router.Run(fmt.Sprintf(":%d", c.Int("port")))
-	return nil
+
+	port := c.Int("port")
+	log.WithField("port", port).Debug("starting hermes server")
+	return router.Run(strconv.Itoa(port))
 }
 
 func getEventInfo(c *gin.Context) {
