@@ -179,7 +179,8 @@ func runServer(c *cli.Context) error {
 }
 
 func getEventInfo(c *gin.Context) {
-	info, err := event.GetEventInfo(PublicDNS, c.Param("uri"), c.Param("secret"))
+	uri := strings.Replace(c.Param("uri"), "_slash_", "/", -1)
+	info, err := event.GetEventInfo(PublicDNS, uri, c.Param("secret"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
