@@ -23,7 +23,7 @@ type (
 	}
 )
 
-const validURI = `^registry:dockerhub:[a-z0-9_-]+:[a-z0-9_-]+:push$`
+const validURI = `^registry:dockerhub:[a-z0-9_-]+:[a-z0-9_-]+:push(:[[:xdigit:]]{12})?$$`
 
 // compiled validator regexp
 var validator, _ = regexp.Compile(validURI)
@@ -44,6 +44,11 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 	repo := s[2]
 	// dockerhub image 2nd
 	image := s[3]
+	// get account hash (may not exist)
+	var account string
+	if len(s) == 6 {
+		account = s[5]
+	}
 
 	// format info
 	info := new(Info)
@@ -55,6 +60,9 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 	} else {
 		q := u.Query()
 		q.Set("secret", secret)
+		if account != "" {
+			q.Set("account", account)
+		}
 		u.Path = "nomios/dockerhub" + u.Path
 		u.RawQuery = q.Encode()
 		info.Endpoint = u.String()

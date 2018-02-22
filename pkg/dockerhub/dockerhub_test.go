@@ -39,14 +39,14 @@ func TestContextBindWithQuery(t *testing.T) {
 		t.Fatal(err)
 	}
 	data, _ := json.Marshal(payload)
-	c.Request, err = http.NewRequest("POST", "/dockerhub?secret=SECRET", bytes.NewBufferString(string(data)))
+	c.Request, err = http.NewRequest("POST", "/dockerhub?secret=SECRET&account=cb1e73c5215b", bytes.NewBufferString(string(data)))
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// setup mock
 	hermesMock := new(HermesMock)
-	eventURI := "registry:dockerhub:alexeiled:alpine-plus:push"
+	eventURI := "registry:dockerhub:alexeiled:alpine-plus:push:cb1e73c5215b"
 	event := hermes.NormalizedEvent{
 		Original: string(data),
 		Secret:   "SECRET",

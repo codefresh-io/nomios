@@ -31,6 +31,20 @@ func TestGetEventInfo(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name: "test happy path with account",
+			args: args{
+				dns:    "https://public-ip",
+				uri:    "registry:dockerhub:codefresh:fortune:push:cb1e73c5215b",
+				secret: "123456789",
+			},
+			want: &Info{
+				Description: "Docker Hub codefresh/fortune push event",
+				Endpoint:    "https://public-ip/nomios/dockerhub?secret=123456789&account=cb1e73c5215b",
+				Status:      "active",
+			},
+			wantErr: false,
+		},
+		{
 			name: "test complex path",
 			args: args{
 				dns:    "http://dev-tunneler.codefresh.io?client=itai-gendler&service=cfrouter",
