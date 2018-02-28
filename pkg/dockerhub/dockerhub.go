@@ -48,8 +48,12 @@ func NewDockerHub(svc hermes.Service) *DockerHub {
 	return &DockerHub{svc}
 }
 
-func constructEventURI(payload *webhookPayload) string {
-	return fmt.Sprintf("registry:dockerhub:%s:%s:push", payload.Repository.Namespace, payload.Repository.Name)
+func constructEventURI(payload *webhookPayload, account string) string {
+	uri := fmt.Sprintf("registry:dockerhub:%s:%s:push", payload.Repository.Namespace, payload.Repository.Name)
+	if account != "" {
+		uri = fmt.Sprintf("%s:%s", uri, account)
+	}
+	return uri
 }
 
 // HandleWebhook handle DockerHub webhook
@@ -63,7 +67,7 @@ func (d *DockerHub) HandleWebhook(c *gin.Context) {
 	}
 
 	event := hermes.NewNormalizedEvent()
-	eventURI := constructEventURI(&payload)
+	eventURI := constructEventURI(&payload, c.Query("account"))
 	payloadJSON, err := json.Marshal(payload)
 	if err != nil {
 		log.WithError(err).Error("Failed to covert webhook payload structure to JSON")
