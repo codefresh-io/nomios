@@ -20,7 +20,7 @@ func TestGetEventInfo(t *testing.T) {
 			name: "test happy path",
 			args: args{
 				dns:    "https://public-ip",
-				uri:    "registry:dockerhub:codefresh:fortune:push",
+				uri:    "registry:dockerhub:codefresh:fortune:push:cb1e73c5215b",
 				secret: "123456789",
 			},
 			want: &Info{
@@ -48,7 +48,7 @@ func TestGetEventInfo(t *testing.T) {
 			name: "test complex path",
 			args: args{
 				dns:    "http://dev-tunneler.codefresh.io?client=itai-gendler&service=cfrouter",
-				uri:    "registry:dockerhub:codefresh:fortune:push",
+				uri:    "registry:dockerhub:codefresh:fortune:push:cb1e73c5215b",
 				secret: "123456789",
 			},
 			want: &Info{
@@ -62,7 +62,7 @@ func TestGetEventInfo(t *testing.T) {
 			name: "test bad dns",
 			args: args{
 				dns:    "::::",
-				uri:    "registry:dockerhub:codefresh:fortune:push",
+				uri:    "registry:dockerhub:codefresh:fortune:push:cb1e73c5215b",
 				secret: "123456789",
 			},
 			want: &Info{
@@ -76,7 +76,7 @@ func TestGetEventInfo(t *testing.T) {
 			name: "test bad event uri",
 			args: args{
 				dns:    "https://public-ip",
-				uri:    "registry:dockerhub:unexpected-format:push",
+				uri:    "registry:dockerhub:unexpected-format:push:cb1e73c5215b",
 				secret: "123456789",
 			},
 			want:    nil,
