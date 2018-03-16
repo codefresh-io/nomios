@@ -147,6 +147,7 @@ func runServer(c *cli.Context) error {
 		if !strings.HasPrefix(hermesSvcName, "http://") {
 			hermesSvcName = "http://" + hermesSvcName
 		}
+		log.Debug("setting DockerHub webhook endpoint")
 		hub = dockerhub.NewDockerHub(hermes.NewHermesEndpoint(hermesSvcName, c.String("token")))
 	}
 
@@ -182,6 +183,7 @@ func getEventInfo(c *gin.Context) {
 	uri := strings.Replace(c.Param("uri"), "_slash_", "/", -1)
 	info, err := event.GetEventInfo(PublicDNS, uri, c.Param("secret"))
 	if err != nil {
+		log.WithError(err).Error("failed to get trigger-event info")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -195,6 +197,7 @@ func subscribeToEvent(c *gin.Context) {
 	// 	return
 	// }
 	// c.JSON(http.StatusOK, info)
+	log.Warn("not implemented method SubscribeToEvent")
 	c.Status(http.StatusNotImplemented)
 }
 
@@ -205,6 +208,7 @@ func unsubscribeFromEvent(c *gin.Context) {
 	// 	return
 	// }
 	// c.JSON(http.StatusOK, info)
+	log.Warn("not implemented method UnsubscribeFromEvent")
 	c.Status(http.StatusNotImplemented)
 }
 

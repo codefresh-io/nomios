@@ -33,9 +33,9 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 	log.WithFields(log.Fields{
 		"event-uri": uri,
 		"validator": validURI,
-	}).Debug("Matching event to expected validation regex")
+	}).Debug("get trigger-event info")
 	if !validator.MatchString(uri) {
-		log.Error("Failed to match event URI")
+		log.Error("failed to match event URI")
 		return nil, fmt.Errorf("unexpected event uri: %s", uri)
 	}
 	// split uri
