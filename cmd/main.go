@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 
@@ -102,8 +103,10 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 		},
 	}
 
-	app.Run(os.Args)
-
+	if err := app.Run(os.Args); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
 
 func before(c *cli.Context) error {
@@ -180,7 +183,10 @@ func runServer(c *cli.Context) error {
 }
 
 func getEventInfo(c *gin.Context) {
-	uri := strings.Replace(c.Param("uri"), "_slash_", "/", -1)
+	uri, err := url.QueryUnescape(c.Param("uri"))
+	if err != nil {
+		log.WithField("uri", uri).WithError(err).Error("failed to URL decode event uri")
+	}
 	info, err := event.GetEventInfo(PublicDNS, uri, c.Param("secret"))
 	if err != nil {
 		log.WithError(err).Error("failed to get trigger-event info")
