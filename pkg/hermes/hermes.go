@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 
 	"github.com/dghubble/sling"
 	log "github.com/sirupsen/logrus"
@@ -67,7 +68,7 @@ func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) er
 		"vars":     event.Variables,
 		"original": event.Original,
 	}).Debug("sending normalized event payload")
-	resp, err := api.endpoint.New().Post(fmt.Sprint("run/", eventURI)).BodyJSON(event).Receive(&runs, &hermesErr)
+	resp, err := api.endpoint.New().Post(fmt.Sprint("run/", url.PathEscape(eventURI))).BodyJSON(event).Receive(&runs, &hermesErr)
 	// ignore EOF JSON parsing error
 	if err != nil && err != io.EOF {
 		log.WithError(err).WithField("api", "POST /run/").Error("failed to invoke Hermes REST API")
