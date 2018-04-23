@@ -183,7 +183,7 @@ func runServer(c *cli.Context) error {
 }
 
 func getEventInfo(c *gin.Context) {
-	uri, err := url.QueryUnescape(c.Param("uri"))
+	uri, err := url.PathUnescape(c.Param("uri"))
 	if err != nil {
 		log.WithField("uri", uri).WithError(err).Error("failed to URL decode event uri")
 	}
