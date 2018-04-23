@@ -177,8 +177,12 @@ func runServer(c *cli.Context) error {
 	router.GET("/version", getVersion)
 	router.GET("/", getVersion)
 
+	// set router server port
 	port := c.Int("port")
 	log.WithField("port", port).Debug("starting nomios server")
+	// use RawPath: the url.RawPath will be used to find parameters
+	router.UseRawPath = true
+	// start router server
 	return router.Run(fmt.Sprintf(":%d", port))
 }
 
