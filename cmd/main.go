@@ -175,6 +175,8 @@ func runServer(c *cli.Context) error {
 	router.GET("/health", getHealth)
 	router.GET("/nomios/version", getVersion)
 	router.GET("/version", getVersion)
+	router.GET("/nomios/ping", ping)
+	router.GET("/ping", ping)
 	router.GET("/", getVersion)
 
 	// set router server port
@@ -228,4 +230,9 @@ func getHealth(c *gin.Context) {
 
 func getVersion(c *gin.Context) {
 	c.String(http.StatusOK, version.HumanVersion)
+}
+
+// Ping return PONG with OK
+func ping(c *gin.Context) {
+	c.String(http.StatusOK, "PONG")
 }
