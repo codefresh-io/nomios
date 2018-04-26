@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/codefresh-io/go-infra"
+  packages = ["pkg/logger"]
+  revision = "5d0060ced546fb745bdc8a47b4777f5cc313c3c5"
+
+[[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
@@ -50,10 +56,10 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "master"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
-  revision = "d682213848ed68c0a260ca37d6dd5ace8423f5ba"
-  version = "v1.0.4"
+  revision = "778f2e774c725116edbc3d039dc0dfc1cc62aae8"
 
 [[projects]]
   branch = "master"
@@ -106,6 +112,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "1573a557c2c10b5d08fb4bbc2fe0ce7bcf38116d3b3549cdfa742b1b8a96603e"
+  inputs-digest = "969095178acb3e1f138bb59f5941fa4c30449c71677de86cda669d87c76347c7"
   solver-name = "gps-cdcl"
   solver-version = 1
