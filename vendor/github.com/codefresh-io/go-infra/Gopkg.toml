@@ -67,9 +67,17 @@
 
 
 [[constraint]]
-  name = "github.com/gin-gonic/gin"
-  version = "1.2.0"
+  name = "github.com/davecgh/go-spew"
+  version = "1.1.0"
+
+[[constraint]]
+  name = "github.com/pmezard/go-difflib"
+  version = "1.0.0"
 
 [[constraint]]
   branch = "master"
-  name = "github.com/codefresh-io/go-infra"
+  name = "github.com/sirupsen/logrus"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/stretchr/testify"

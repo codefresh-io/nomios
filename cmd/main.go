@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/codefresh-io/go-infra/pkg/logger"
 	"github.com/codefresh-io/nomios/pkg/dockerhub"
 	"github.com/codefresh-io/nomios/pkg/event"
 	"github.com/codefresh-io/nomios/pkg/hermes"
@@ -99,7 +100,7 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 		},
 		cli.BoolFlag{
 			Name:  "json",
-			Usage: "produce log in JSON format: Logstash and Splunk friendly",
+			Usage: "produce log in Codefresh JSON format",
 		},
 	}
 
@@ -129,7 +130,7 @@ func before(c *cli.Context) error {
 	}
 	// set log formatter to JSON
 	if c.GlobalBool("json") {
-		log.SetFormatter(&log.JSONFormatter{})
+		log.SetFormatter(&logger.CFFormatter{})
 	}
 
 	return nil
