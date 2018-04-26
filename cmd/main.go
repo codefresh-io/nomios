@@ -99,8 +99,9 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 			EnvVar: "LOG_LEVEL",
 		},
 		cli.BoolFlag{
-			Name:  "json",
-			Usage: "produce log in Codefresh JSON format",
+			Name:   "json",
+			Usage:  "produce log in Codefresh JSON format",
+			EnvVar: "LOG_JSON",
 		},
 	}
 
