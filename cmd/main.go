@@ -175,10 +175,10 @@ func runServer(c *cli.Context) error {
 	router.GET("/nomios/event/:uri/:secret", gin.Logger(), getEventInfo)
 	router.GET("/event/:uri/:secret", gin.Logger(), getEventInfo)
 	// subscribe/unsubscribe route
-	router.POST("/nomios/event/:uri/:secret/:credentials", gin.Logger(), subscribeToEvent)
-	router.POST("/event/:uri/:secret/:credentials", gin.Logger(), subscribeToEvent)
-	router.DELETE("/nomios/event/:uri/:credentials", gin.Logger(), unsubscribeFromEvent)
-	router.DELETE("/event/:uri/:credentials", gin.Logger(), unsubscribeFromEvent)
+	router.POST("/nomios/event/:uri", gin.Logger(), subscribeToEvent)
+	router.POST("/event/:uri", gin.Logger(), subscribeToEvent)
+	router.DELETE("/nomios/event/:uri", gin.Logger(), unsubscribeFromEvent)
+	router.DELETE("/event/:uri", gin.Logger(), unsubscribeFromEvent)
 	// status routes
 	router.GET("/nomios/health", getHealth)
 	router.GET("/health", getHealth)

@@ -79,7 +79,7 @@ Add following Codefresh Docker Hub webhook endpoint %s`, repo, image, info.Endpo
 }
 
 // Subscribe to event in DockerHub
-func Subscribe(publicDNS, uri, secret, credentials string) (*Info, error) {
+func Subscribe(publicDNS, uri, eventType, kind, secret string, values, credentials map[string]string) (*Info, error) {
 	return nil, nil
 }
 
