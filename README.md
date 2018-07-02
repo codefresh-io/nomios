@@ -15,7 +15,8 @@ POST ${HERMES_SERVICE}/trigger/${event}
 ```json
 {
     "secret": "webhook secret",
-    "original": "<original DockerHub webhook payload",
+    "original": "{original DockerHub webhook payload}",
+    "action": "push",
     "variables": {
         "namespace": "<image namespace>",
         "name": "<image name>",

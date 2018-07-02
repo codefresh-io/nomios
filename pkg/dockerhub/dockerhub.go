@@ -87,6 +87,9 @@ func (d *DockerHub) HandleWebhook(c *gin.Context) {
 	// get secret from URL query
 	event.Secret = c.Query("secret")
 
+	// set event action
+	event.Action = "push"
+
 	// invoke trigger
 	err = d.hermesSvc.TriggerEvent(eventURI, event)
 	if err != nil {

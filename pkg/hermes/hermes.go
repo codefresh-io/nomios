@@ -26,6 +26,7 @@ type (
 		Original  string            `json:"original,omitempty"`
 		Secret    string            `json:"secret,omitempty"`
 		Variables map[string]string `json:"variables,omitempty"`
+		Action    string            `json:"action,omitempty"`
 	}
 )
 
@@ -67,6 +68,7 @@ func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) er
 		"secret":   event.Secret,
 		"vars":     event.Variables,
 		"original": event.Original,
+		"action":   event.Action,
 	}).Debug("sending normalized event payload")
 	resp, err := api.endpoint.New().Post(fmt.Sprint("run/", url.PathEscape(eventURI))).BodyJSON(event).Receive(&runs, &hermesErr)
 	// ignore EOF JSON parsing error

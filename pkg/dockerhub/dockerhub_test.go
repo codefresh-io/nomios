@@ -57,6 +57,7 @@ func TestContextBindWithQuery(t *testing.T) {
 			"pusher":    "alexeiled",
 			"pushed_at": time.Unix(1512920349, 0).Format(time.RFC3339),
 		},
+		Action: "push",
 	}
 	hermesMock.On("TriggerEvent", eventURI, &event).Return(nil)
 
