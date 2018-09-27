@@ -16,7 +16,6 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
-
 )
 
 // HermesDryRun dry run stub
@@ -157,7 +156,7 @@ func runServer(c *cli.Context) error {
 	if c.Bool("dry-run") {
 		hub = dockerhub.NewDockerHub(&HermesDryRun{})
 	} else {
-	//	// add http protocol, if missing
+		// add http protocol, if missing
 		hermesSvcName := c.String("hermes")
 		if !strings.HasPrefix(hermesSvcName, "http://") {
 			hermesSvcName = "http://" + hermesSvcName
@@ -177,7 +176,7 @@ func runServer(c *cli.Context) error {
 	quayHook := quay.NewQuay(hermesEndpoint)
 
 	router.POST("/nomios/dockerhub", gin.Logger(), hub.HandleWebhook)
-	//router.POST("/dockerhub", gin.Logger(), hub.HandleWebhook)
+	router.POST("/dockerhub", gin.Logger(), hub.HandleWebhook)
 
 	router.POST("/nomios/quay", gin.Logger(), quayHook.HandleWebhook)
 
