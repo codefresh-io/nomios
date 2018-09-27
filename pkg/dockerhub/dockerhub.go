@@ -57,7 +57,7 @@ func constructEventURI(payload *webhookPayload, account string) string {
 }
 
 // HandleWebhook handle DockerHub webhook
-func (d *DockerHub) HandleWebhook(c *gin.Context) {
+func (d *DockerHub) HandleWebhook(c *gin.Context)  {
 	log.Debug("Got Docker Hub webhook event")
 	payload := webhookPayload{}
 	if err := c.BindJSON(&payload); err != nil {

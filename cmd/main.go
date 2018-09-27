@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"strings"
+	//"strings"
 
 	"github.com/codefresh-io/go-infra/pkg/logger"
 	"github.com/codefresh-io/nomios/pkg/dockerhub"
@@ -15,6 +15,10 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
+
+	quay "../pkg/quay"
+	"strings"
+	//"github.com/codefresh-io/nomios/pkg/dockerhub"
 )
 
 // HermesDryRun dry run stub
@@ -36,6 +40,11 @@ func (m *HermesDryRun) TriggerEvent(eventURI string, event *hermes.NormalizedEve
 }
 
 func main() {
+
+
+
+
+
 	app := cli.NewApp()
 	app.Name = "nomios"
 	app.Authors = []cli.Author{{Name: "Alexei Ledenev", Email: "alexei@codefresh.io"}}
@@ -131,7 +140,7 @@ func before(c *cli.Context) error {
 	}
 	// set log formatter to JSON
 	if c.GlobalBool("json") {
-		log.SetFormatter(&logger.CFFormatter{})
+		//log.SetFormatter(&logger.CFFormatter{})
 	}
 	// trace function calls
 	traceHook := logger.NewHook()
@@ -139,7 +148,7 @@ func before(c *cli.Context) error {
 	traceHook.AppName = "hermes"
 	traceHook.FunctionField = logger.FieldNamespace
 	traceHook.AppField = logger.FieldService
-	log.AddHook(traceHook)
+	//log.AddHook(traceHook)
 
 	return nil
 }
@@ -151,15 +160,17 @@ func runServer(c *cli.Context) error {
 
 	// bind dockerhub to hermes API endpoint
 	var hub *dockerhub.DockerHub
+	var hermesEndpoint hermes.Service
 	if c.Bool("dry-run") {
 		hub = dockerhub.NewDockerHub(&HermesDryRun{})
 	} else {
-		// add http protocol, if missing
+	//	// add http protocol, if missing
 		hermesSvcName := c.String("hermes")
 		if !strings.HasPrefix(hermesSvcName, "http://") {
 			hermesSvcName = "http://" + hermesSvcName
 		}
 		log.Debug("setting DockerHub webhook endpoint")
+		hermesEndpoint = hermes.NewHermesEndpoint(hermesSvcName, c.String("token"))
 		hub = dockerhub.NewDockerHub(hermes.NewHermesEndpoint(hermesSvcName, c.String("token")))
 	}
 
@@ -169,8 +180,14 @@ func runServer(c *cli.Context) error {
 	// setup gin router
 	router := gin.New()
 	router.Use(gin.Recovery())
+
+	quayHook := quay.NewQuay(hermesEndpoint)
+
 	router.POST("/nomios/dockerhub", gin.Logger(), hub.HandleWebhook)
-	router.POST("/dockerhub", gin.Logger(), hub.HandleWebhook)
+	//router.POST("/dockerhub", gin.Logger(), hub.HandleWebhook)
+
+	router.POST("/nomios/quay", gin.Logger(), quayHook.HandleWebhook)
+
 	// event info route
 	router.GET("/nomios/event/:uri/:secret", gin.Logger(), getEventInfo)
 	router.GET("/event/:uri/:secret", gin.Logger(), getEventInfo)

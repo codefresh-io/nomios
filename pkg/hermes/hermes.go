@@ -8,6 +8,7 @@ import (
 
 	"github.com/dghubble/sling"
 	log "github.com/sirupsen/logrus"
+	"encoding/json"
 )
 
 type (
@@ -68,6 +69,12 @@ func (api *APIEndpoint) TriggerEvent(eventURI string, event *NormalizedEvent) er
 		"vars":     event.Variables,
 		"original": event.Original,
 	}).Debug("sending normalized event payload")
+
+	log.Info("LEVEL URL " + url.PathEscape(eventURI))
+
+	b, _ := json.Marshal(event)
+	log.Info(string(b))
+
 	resp, err := api.endpoint.New().Post(fmt.Sprint("run/", url.PathEscape(eventURI))).BodyJSON(event).Receive(&runs, &hermesErr)
 	// ignore EOF JSON parsing error
 	if err != nil && err != io.EOF {
