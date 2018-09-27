@@ -67,7 +67,7 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 				cli.StringFlag{
 					Name:   "hermes",
 					Usage:  "Codefresh Hermes service",
-					Value:  "http://local.codefresh.io:9011",
+					Value:  "http://localhost:9011",
 					EnvVar: "HERMES_SERVICE",
 				},
 				cli.StringFlag{

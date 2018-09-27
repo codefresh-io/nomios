@@ -40,6 +40,7 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 	}
 	// split uri
 	s := strings.Split(uri, ":")
+	kind := s[1]
 	// dockerhub repository 1st
 	repo := s[2]
 	// dockerhub image 2nd
@@ -50,9 +51,21 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 		account = s[5]
 	}
 
+	//TODO: refactor it, move to different classes , dockerhub_info.go and quay_info.go and imepelement different methods
+	var humanReadableType string
+	var settingsLink string
+	if kind == "quay"{
+		humanReadableType = "Quay"
+		settingsLink = fmt.Sprintf("https://quay.io/repository/%s/%s?tab=settings", repo, image)
+	} else {
+		humanReadableType = "Docker Hub"
+		settingsLink = fmt.Sprintf("https://hub.docker.com/r/%s/%s/~/settings/webhooks/", repo, image)
+	}
+
+
 	// format info
 	info := new(Info)
-	info.Description = fmt.Sprintf("Docker Hub %s/%s push event", repo, image)
+	info.Description = fmt.Sprintf("%s %s/%s push event", humanReadableType, repo, image)
 	// handle endpoint url
 	u, err := url.Parse(publicDNS)
 	if err != nil {
@@ -63,16 +76,16 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 		if account != "" {
 			q.Set("account", account)
 		}
-		u.Path = "nomios/dockerhub" + u.Path
+		u.Path = "nomios/" + kind + u.Path
 		u.RawQuery = q.Encode()
 		info.Endpoint = u.String()
 	}
 	info.Status = "active"
-	info.Help = fmt.Sprintf(`Docker Hub webhooks fire when an image is built in, pushed or a new tag is added to, your repository.
+	info.Help = fmt.Sprintf(`%s webhooks fire when an image is built in, pushed or a new tag is added to, your repository.
 
-Configure Docker Hub webhooks on https://hub.docker.com/r/%s/%s/~/settings/webhooks/
+Configure %s on %s
 
-Add following Codefresh Docker Hub webhook endpoint %s`, repo, image, info.Endpoint)
+Add following Codefresh %s webhook endpoint %s`, humanReadableType, humanReadableType, settingsLink, humanReadableType, info.Endpoint)
 
 	// return info
 	return info, nil
