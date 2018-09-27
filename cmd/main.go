@@ -5,10 +5,11 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	//"strings"
+	"strings"
 
 	"github.com/codefresh-io/go-infra/pkg/logger"
 	"github.com/codefresh-io/nomios/pkg/dockerhub"
+	"github.com/codefresh-io/nomios/pkg/quay"
 	"github.com/codefresh-io/nomios/pkg/event"
 	"github.com/codefresh-io/nomios/pkg/hermes"
 	"github.com/codefresh-io/nomios/pkg/version"
@@ -16,9 +17,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 
-	quay "../pkg/quay"
-	"strings"
-	//"github.com/codefresh-io/nomios/pkg/dockerhub"
 )
 
 // HermesDryRun dry run stub
@@ -40,11 +38,6 @@ func (m *HermesDryRun) TriggerEvent(eventURI string, event *hermes.NormalizedEve
 }
 
 func main() {
-
-
-
-
-
 	app := cli.NewApp()
 	app.Name = "nomios"
 	app.Authors = []cli.Author{{Name: "Alexei Ledenev", Email: "alexei@codefresh.io"}}
@@ -67,7 +60,7 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 				cli.StringFlag{
 					Name:   "hermes",
 					Usage:  "Codefresh Hermes service",
-					Value:  "http://localhost:9011",
+					Value:  "http://local.codefresh.io:9011",
 					EnvVar: "HERMES_SERVICE",
 				},
 				cli.StringFlag{
@@ -140,7 +133,7 @@ func before(c *cli.Context) error {
 	}
 	// set log formatter to JSON
 	if c.GlobalBool("json") {
-		//log.SetFormatter(&logger.CFFormatter{})
+		log.SetFormatter(&logger.CFFormatter{})
 	}
 	// trace function calls
 	traceHook := logger.NewHook()
@@ -148,7 +141,7 @@ func before(c *cli.Context) error {
 	traceHook.AppName = "hermes"
 	traceHook.FunctionField = logger.FieldNamespace
 	traceHook.AppField = logger.FieldService
-	//log.AddHook(traceHook)
+	log.AddHook(traceHook)
 
 	return nil
 }
