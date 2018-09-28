@@ -9,6 +9,7 @@ import (
 
 	"github.com/codefresh-io/go-infra/pkg/logger"
 	"github.com/codefresh-io/nomios/pkg/dockerhub"
+	"github.com/codefresh-io/nomios/pkg/quay"
 	"github.com/codefresh-io/nomios/pkg/event"
 	"github.com/codefresh-io/nomios/pkg/hermes"
 	"github.com/codefresh-io/nomios/pkg/version"
@@ -151,6 +152,7 @@ func runServer(c *cli.Context) error {
 
 	// bind dockerhub to hermes API endpoint
 	var hub *dockerhub.DockerHub
+	var hermesEndpoint hermes.Service
 	if c.Bool("dry-run") {
 		hub = dockerhub.NewDockerHub(&HermesDryRun{})
 	} else {
@@ -160,6 +162,7 @@ func runServer(c *cli.Context) error {
 			hermesSvcName = "http://" + hermesSvcName
 		}
 		log.Debug("setting DockerHub webhook endpoint")
+		hermesEndpoint = hermes.NewHermesEndpoint(hermesSvcName, c.String("token"))
 		hub = dockerhub.NewDockerHub(hermes.NewHermesEndpoint(hermesSvcName, c.String("token")))
 	}
 
@@ -169,8 +172,14 @@ func runServer(c *cli.Context) error {
 	// setup gin router
 	router := gin.New()
 	router.Use(gin.Recovery())
+
+	quayHook := quay.NewQuay(hermesEndpoint)
+
 	router.POST("/nomios/dockerhub", gin.Logger(), hub.HandleWebhook)
 	router.POST("/dockerhub", gin.Logger(), hub.HandleWebhook)
+
+	router.POST("/nomios/quay", gin.Logger(), quayHook.HandleWebhook)
+
 	// event info route
 	router.GET("/nomios/event/:uri/:secret", gin.Logger(), getEventInfo)
 	router.GET("/event/:uri/:secret", gin.Logger(), getEventInfo)
