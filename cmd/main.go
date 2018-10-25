@@ -9,9 +9,10 @@ import (
 
 	"github.com/codefresh-io/go-infra/pkg/logger"
 	"github.com/codefresh-io/nomios/pkg/dockerhub"
-	"github.com/codefresh-io/nomios/pkg/quay"
 	"github.com/codefresh-io/nomios/pkg/event"
 	"github.com/codefresh-io/nomios/pkg/hermes"
+	"github.com/codefresh-io/nomios/pkg/jfrog"
+	"github.com/codefresh-io/nomios/pkg/quay"
 	"github.com/codefresh-io/nomios/pkg/version"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
@@ -174,11 +175,13 @@ func runServer(c *cli.Context) error {
 	router.Use(gin.Recovery())
 
 	quayHook := quay.NewQuay(hermesEndpoint)
+	jfrogHook := jfrog.NewJFrog(hermesEndpoint)
 
 	router.POST("/nomios/dockerhub", gin.Logger(), hub.HandleWebhook)
 	router.POST("/dockerhub", gin.Logger(), hub.HandleWebhook)
 
 	router.POST("/nomios/quay", gin.Logger(), quayHook.HandleWebhook)
+	router.POST("/nomios/jfrog", gin.Logger(), jfrogHook.HandleWebhook)
 
 	// event info route
 	router.GET("/nomios/event/:uri/:secret", gin.Logger(), getEventInfo)

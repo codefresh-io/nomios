@@ -23,7 +23,7 @@ type (
 	}
 )
 
-const validURI = `^registry:(dockerhub|quay):[a-z0-9_-]+:[a-z0-9_-]+:push(:[[:xdigit:]]{12})$`
+const validURI = `^registry:(dockerhub|quay|jfrog):[a-z0-9_-]+:[a-z0-9_-]+:push(:[[:xdigit:]]{12})$`
 
 // compiled validator regexp
 var validator, _ = regexp.Compile(validURI)
@@ -54,14 +54,16 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 	//TODO: refactor it, move to different classes , dockerhub_info.go and quay_info.go and imepelement different methods
 	var humanReadableType string
 	var settingsLink string
-	if kind == "quay"{
+	if kind == "quay" {
 		humanReadableType = "Quay"
 		settingsLink = fmt.Sprintf("https://quay.io/repository/%s/%s?tab=settings", repo, image)
+	} else if kind == "jfrog" {
+		humanReadableType = "JFrog"
+		settingsLink = "https://codefresh.io/docs/docs/configure-ci-cd-pipeline/triggers/jfrog-triggers/"
 	} else {
 		humanReadableType = "Docker Hub"
 		settingsLink = fmt.Sprintf("https://hub.docker.com/r/%s/%s/~/settings/webhooks/", repo, image)
 	}
-
 
 	// format info
 	info := new(Info)
