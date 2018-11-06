@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/codefresh-io/go-infra/pkg/logger"
+	"github.com/codefresh-io/nomios/pkg/azure"
 	"github.com/codefresh-io/nomios/pkg/dockerhub"
 	"github.com/codefresh-io/nomios/pkg/event"
 	"github.com/codefresh-io/nomios/pkg/hermes"
@@ -176,12 +177,14 @@ func runServer(c *cli.Context) error {
 
 	quayHook := quay.NewQuay(hermesEndpoint)
 	jfrogHook := jfrog.NewJFrog(hermesEndpoint)
+	azureHook := azure.NewAzure(hermesEndpoint)
 
 	router.POST("/nomios/dockerhub", gin.Logger(), hub.HandleWebhook)
 	router.POST("/dockerhub", gin.Logger(), hub.HandleWebhook)
 
 	router.POST("/nomios/quay", gin.Logger(), quayHook.HandleWebhook)
 	router.POST("/nomios/jfrog", gin.Logger(), jfrogHook.HandleWebhook)
+	router.POST("/nomios/azure", gin.Logger(), azureHook.HandleWebhook)
 
 	// event info route
 	router.GET("/nomios/event/:uri/:secret", gin.Logger(), getEventInfo)

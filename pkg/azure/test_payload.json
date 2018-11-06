@@ -1,0 +1,20 @@
+{
+  "artifactory": {
+    "webhook": {
+      "event": "docker.tagCreated",
+      "data": {
+        "docker": {
+          "tag": "tagName",
+          "image": "test"
+        },
+        "event": {
+          "modifiedBy": "admin",
+          "created": 1540479021000,
+          "repoPath": {
+            "repoKey": "local"
+          }
+        }
+      }
+    }
+  }
+}
