@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"strings"
 )
 
 // azure struct
@@ -32,7 +33,8 @@ func NewAzure(svc hermes.Service) *azure {
 }
 
 func constructEventURI(payload *webhookPayload, account string) string {
-	uri := fmt.Sprintf("registry:azure:%s:%s:push", "andriishaforostov", payload.Target.Repository)
+	ns := strings.Split(payload.Request.Host, ".")
+	uri := fmt.Sprintf("registry:azure:%s:%s:push", ns[0], payload.Target.Repository)
 	if account != "" {
 		uri = fmt.Sprintf("%s:%s", uri, account)
 	}
@@ -50,10 +52,10 @@ func (d *azure) HandleWebhook(c *gin.Context) {
 		return
 	}
 
-	//if payload.Artifactory.Webhook.Event != "docker.tagCreated" {
-	//	log.Debug(fmt.Sprintf("Skip event %s", payload.Artifactory.Webhook.Event))
-	//	return
-	//}
+	if payload.Action != "push" {
+		log.Debug(fmt.Sprintf("Skip event %s", payload.Action))
+		return
+	}
 
 	event := hermes.NewNormalizedEvent()
 	eventURI := constructEventURI(&payload, c.Query("account"))
@@ -68,7 +70,8 @@ func (d *azure) HandleWebhook(c *gin.Context) {
 
 	// get image push details
 	event.Variables["event"] = payload.Action
-	event.Variables["namespace"] = "andriishaforostov" //payload.Request.Host
+	ns := strings.Split(payload.Request.Host, ".")
+	event.Variables["namespace"] = ns[0]
 	event.Variables["name"] = payload.Target.Repository
 	event.Variables["tag"] = payload.Target.Tag
 	//event.Variables["pusher"] = payload.Artifactory.Webhook.Data.Event.ModifiedBy

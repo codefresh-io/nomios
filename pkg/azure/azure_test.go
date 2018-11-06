@@ -3,15 +3,13 @@ package azure
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/codefresh-io/nomios/pkg/hermes"
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/mock"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
-
-	"github.com/codefresh-io/nomios/pkg/hermes"
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/mock"
 )
 
 type HermesMock struct {
@@ -39,31 +37,30 @@ func TestContextBindWithQuery(t *testing.T) {
 		t.Fatal(err)
 	}
 	data, _ := json.Marshal(payload)
-	c.Request, err = http.NewRequest("POST", "/jfrog?secret=SECRET&account=cb1e73c5215b", bytes.NewBufferString(string(data)))
+	c.Request, err = http.NewRequest("POST", "/azure?secret=SECRET&account=cb1e73c5215b", bytes.NewBufferString(string(data)))
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// setup mock
 	hermesMock := new(HermesMock)
-	eventURI := "registry:jfrog:local:test:push:cb1e73c5215b"
+	eventURI := "registry:azure:host:repo:push:cb1e73c5215b"
 	event := hermes.NormalizedEvent{
 		Original: string(data),
 		Secret:   "SECRET",
 		Variables: map[string]string{
-			"event":     "docker.tagCreated",
-			"namespace": "local",
-			"name":      "test",
-			"tag":       "tagName",
-			"pusher":    "admin",
-			"pushed_at": time.Unix(1540479021, 0).Format(time.RFC3339),
+			"event":     "push",
+			"namespace": "host",
+			"name":      "repo",
+			"tag":       "latest",
+			"pushed_at": "2018-11-05T18:24:27.609016022Z",
 		},
 	}
 	hermesMock.On("TriggerEvent", eventURI, &event).Return(nil)
 
 	// bind dockerhub to hermes API endpoint
-	jfrog := NewJFrog(hermesMock)
-	router.POST("/jfrog", jfrog.HandleWebhook)
+	azure := NewAzure(hermesMock)
+	router.POST("/azure", azure.HandleWebhook)
 	router.HandleContext(c)
 
 	// assert expectations

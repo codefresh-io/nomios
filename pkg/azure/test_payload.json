@@ -1,20 +1,11 @@
 {
-  "artifactory": {
-    "webhook": {
-      "event": "docker.tagCreated",
-      "data": {
-        "docker": {
-          "tag": "tagName",
-          "image": "test"
-        },
-        "event": {
-          "modifiedBy": "admin",
-          "created": 1540479021000,
-          "repoPath": {
-            "repoKey": "local"
-          }
-        }
-      }
-    }
+  "timestamp": "2018-11-05T18:24:27.609016022Z",
+  "action": "push",
+  "target": {
+    "repository": "repo",
+    "tag": "latest"
+  },
+  "request": {
+    "host": "host.azurecr.io"
   }
 }
