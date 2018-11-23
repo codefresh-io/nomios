@@ -58,7 +58,7 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 		humanReadableType = "Quay"
 		settingsLink = fmt.Sprintf("https://quay.io/repository/%s/%s?tab=settings", repo, image)
 	} else if kind == "jfrog" {
-		humanReadableType = "JFrog"
+		humanReadableType = "JFrog Artifactory"
 		settingsLink = "https://codefresh.io/docs/docs/configure-ci-cd-pipeline/triggers/jfrog-triggers/"
 	} else if kind == "azure" {
 		humanReadableType = "Azure"
