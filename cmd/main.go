@@ -13,6 +13,7 @@ import (
 	"github.com/codefresh-io/nomios/pkg/event"
 	"github.com/codefresh-io/nomios/pkg/hermes"
 	"github.com/codefresh-io/nomios/pkg/jfrog"
+	"github.com/codefresh-io/nomios/pkg/jfroghelm"
 	"github.com/codefresh-io/nomios/pkg/quay"
 	"github.com/codefresh-io/nomios/pkg/version"
 	"github.com/gin-gonic/gin"
@@ -177,6 +178,7 @@ func runServer(c *cli.Context) error {
 
 	quayHook := quay.NewQuay(hermesEndpoint)
 	jfrogHook := jfrog.NewJFrog(hermesEndpoint)
+	jfrogHelmHook := jfroghelm.NewJFrog(hermesEndpoint)
 	azureHook := azure.NewAzure(hermesEndpoint)
 
 	router.POST("/nomios/dockerhub", gin.Logger(), hub.HandleWebhook)
@@ -185,6 +187,9 @@ func runServer(c *cli.Context) error {
 	router.POST("/nomios/quay", gin.Logger(), quayHook.HandleWebhook)
 	router.POST("/nomios/jfrog", gin.Logger(), jfrogHook.HandleWebhook)
 	router.POST("/nomios/azure", gin.Logger(), azureHook.HandleWebhook)
+
+	router.POST("/nomios/jfrog/helm", gin.Logger(), jfrogHelmHook.HandleWebhook)
+	router.GET("/nomios/jfrog/helm", gin.Logger(), jfrogHelmHook.HandleWebhook)
 
 	// event info route
 	router.GET("/nomios/event/:uri/:secret", gin.Logger(), getEventInfo)

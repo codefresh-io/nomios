@@ -23,7 +23,7 @@ type (
 	}
 )
 
-const validURI = `^registry:(dockerhub|quay|jfrog|azure):[a-z0-9_-]+:[a-z0-9_-]+:push(:[[:xdigit:]]{12})$`
+const validURI = `^(registry|helm):(dockerhub|quay|jfrog|azure):[a-z0-9_-]+:[a-z0-9_-]+:push(:[[:xdigit:]]{12})$`
 
 // compiled validator regexp
 var validator, _ = regexp.Compile(validURI)
@@ -40,6 +40,9 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 	}
 	// split uri
 	s := strings.Split(uri, ":")
+
+	triggerType := s[0]
+
 	kind := s[1]
 	// dockerhub repository 1st
 	repo := s[2]
@@ -54,18 +57,26 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 	//TODO: refactor it, move to different classes , dockerhub_info.go and quay_info.go and imepelement different methods
 	var humanReadableType string
 	var settingsLink string
-	if kind == "quay" {
-		humanReadableType = "Quay"
-		settingsLink = fmt.Sprintf("https://quay.io/repository/%s/%s?tab=settings", repo, image)
-	} else if kind == "jfrog" {
-		humanReadableType = "JFrog Artifactory"
-		settingsLink = "https://codefresh.io/docs/docs/configure-ci-cd-pipeline/triggers/jfrog-triggers/"
-	} else if kind == "azure" {
-		humanReadableType = "Azure"
-		settingsLink = "https://codefresh.io/docs/docs/configure-ci-cd-pipeline/triggers/azure-triggers/"
+
+	if triggerType == "registry" {
+		if kind == "quay" {
+			humanReadableType = "Quay"
+			settingsLink = fmt.Sprintf("https://quay.io/repository/%s/%s?tab=settings", repo, image)
+		} else if kind == "jfrog" {
+			humanReadableType = "JFrog Artifactory"
+			settingsLink = "https://codefresh.io/docs/docs/configure-ci-cd-pipeline/triggers/jfrog-triggers/"
+		} else if kind == "azure" {
+			humanReadableType = "Azure"
+			settingsLink = "https://codefresh.io/docs/docs/configure-ci-cd-pipeline/triggers/azure-triggers/"
+		} else {
+			humanReadableType = "Docker Hub"
+			settingsLink = fmt.Sprintf("https://hub.docker.com/r/%s/%s/~/settings/webhooks/", repo, image)
+		}
 	} else {
-		humanReadableType = "Docker Hub"
-		settingsLink = fmt.Sprintf("https://hub.docker.com/r/%s/%s/~/settings/webhooks/", repo, image)
+		if kind == "jfrog" {
+			humanReadableType = "JFrog Artifactory"
+			settingsLink = "https://codefresh.io/docs/docs/configure-ci-cd-pipeline/triggers/jfrog-triggers/"
+		}
 	}
 
 	// format info
@@ -81,7 +92,13 @@ func GetEventInfo(publicDNS string, uri string, secret string) (*Info, error) {
 		if account != "" {
 			q.Set("account", account)
 		}
-		u.Path = "nomios/" + kind + u.Path
+
+		if triggerType == "registry" {
+			u.Path = "nomios/" + kind + u.Path
+		} else {
+			u.Path = "nomios/" + triggerType + "/" + kind + u.Path
+		}
+
 		u.RawQuery = q.Encode()
 		info.Endpoint = u.String()
 	}
