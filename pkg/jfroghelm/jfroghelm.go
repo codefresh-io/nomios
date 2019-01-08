@@ -46,7 +46,13 @@ func constructEventURI(payload *webhookPayload, account string) string {
 
 // HandleWebhook handle JFrog webhook
 func (d *JFrogHelm) HandleWebhook(c *gin.Context) {
-	log.Debug("Got JFrog webhook event")
+	log.Info("Got JFrog Helm webhook event")
+
+	buf := make([]byte, 5024)
+	num, _ := c.Request.Body.Read(buf)
+	reqBody := string(buf[0:num])
+
+	log.Info("Helm payload " + reqBody)
 
 	payload := webhookPayload{}
 	if err := c.BindJSON(&payload); err != nil {
