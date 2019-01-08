@@ -188,8 +188,8 @@ func runServer(c *cli.Context) error {
 	router.POST("/nomios/jfrog", gin.Logger(), jfrogHook.HandleWebhook)
 	router.POST("/nomios/azure", gin.Logger(), azureHook.HandleWebhook)
 
-	router.POST("/nomios/jfrog/helm", gin.Logger(), jfrogHelmHook.HandleWebhook)
-	router.GET("/nomios/jfrog/helm", gin.Logger(), jfrogHelmHook.HandleWebhook)
+	router.POST("/nomios/helm/jfrog", gin.Logger(), jfrogHelmHook.HandleWebhook)
+	router.GET("/nomios/helm/jfrog", gin.Logger(), jfrogHelmHook.HandleWebhook)
 
 	// event info route
 	router.GET("/nomios/event/:uri/:secret", gin.Logger(), getEventInfo)
