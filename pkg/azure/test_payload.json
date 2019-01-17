@@ -2,7 +2,7 @@
   "timestamp": "2018-11-05T18:24:27.609016022Z",
   "action": "push",
   "target": {
-    "repository": "repo",
+    "repository": "namespace/repo",
     "tag": "latest"
   },
   "request": {
