@@ -36,6 +36,7 @@ func TestContextBindWithQuery(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	payload.Target.Name = "repo"
 	data, _ := json.Marshal(payload)
 	c.Request, err = http.NewRequest("POST", "/azure?secret=SECRET&account=cb1e73c5215b", bytes.NewBufferString(string(data)))
 	if err != nil {

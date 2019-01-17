@@ -21,6 +21,7 @@ type webhookPayload struct {
 	Target    struct {
 		Repository string `json:repository`
 		Tag        string `json:tag`
+		Name       string
 	} `json:target`
 	Request struct {
 		Host string `json:host`
@@ -34,7 +35,7 @@ func NewAzure(svc hermes.Service) *azure {
 
 func constructEventURI(payload *webhookPayload, account string) string {
 	ns := strings.Split(payload.Request.Host, ".")
-	uri := fmt.Sprintf("registry:azure:%s:%s:push", ns[0], payload.Target.Repository)
+	uri := fmt.Sprintf("registry:azure:%s:%s:push", ns[0], payload.Target.Name)
 	if account != "" {
 		uri = fmt.Sprintf("%s:%s", uri, account)
 	}
@@ -46,11 +47,15 @@ func (d *azure) HandleWebhook(c *gin.Context) {
 	log.Debug("Got azure webhook event")
 
 	payload := webhookPayload{}
+
 	if err := c.BindJSON(&payload); err != nil {
 		log.WithError(err).Error("Failed to bind payload JSON to expected structure")
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	var s []string = strings.Split(payload.Target.Repository, "/")
+	payload.Target.Name = strings.Join(s[1:len(s)], "")
 
 	if payload.Action != "push" {
 		log.Debug(fmt.Sprintf("Skip event %s", payload.Action))
@@ -72,7 +77,7 @@ func (d *azure) HandleWebhook(c *gin.Context) {
 	event.Variables["event"] = payload.Action
 	ns := strings.Split(payload.Request.Host, ".")
 	event.Variables["namespace"] = ns[0]
-	event.Variables["name"] = payload.Target.Repository
+	event.Variables["name"] = payload.Target.Name
 	event.Variables["tag"] = payload.Target.Tag
 	//event.Variables["pusher"] = payload.Artifactory.Webhook.Data.Event.ModifiedBy
 	event.Variables["pushed_at"] = payload.Timestamp
