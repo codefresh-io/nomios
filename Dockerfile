@@ -55,11 +55,11 @@ RUN hack/build.sh
 #
 # ------ Nomios DockerHub Event Provider image ------
 #
-FROM alpine:3.7
+FROM alpine:3.9
 
 ENV GIN_MODE=release
 
-RUN apk add --no-cache ca-certificates
+RUN apk update && apk add --no-cache ca-certificates && apk upgrade
 
 COPY --from=builder /go/src/github.com/codefresh-io/nomios/.bin/nomios /usr/local/bin/nomios
 
