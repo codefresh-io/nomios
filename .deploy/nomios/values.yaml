@@ -8,7 +8,7 @@ global:
 
 replicaCount: 1
 image:
-  repository: codefresh/nomios
+  repository: r.cfcr.io/codefresh-inc/codefresh/nomios
   pullPolicy: Always
 imageTag: 0.5
 
