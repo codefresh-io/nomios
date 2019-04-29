@@ -1,0 +1,61 @@
+global:
+  codefresh: codefresh
+# Default values for nomios.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+global:
+  codefresh: codefresh
+
+replicaCount: 1
+image:
+  repository: codefresh/nomios
+  tag: 0.4
+  pullPolicy: Always
+
+# set log level
+logLevel: debug
+
+# true - set log format to Codefresh JSON
+logJSON: false
+
+# set event handler type and kind
+event:
+  type: registry
+  kind: dockerhub
+  action: push
+
+# Hermes Service name - deafult to "<release>-hermes"
+# hermesService: "..."
+
+# publicDnsName - default to global.appUrl, if empty to "https://g.codefresh.io"
+# publicDnsName: "..."
+  
+service:
+  name: nomios
+  type: ClusterIP
+  externalPort: 80
+  internalPort: 8080
+
+ingress:
+  enabled: true
+  # specify host
+  # host: triggers.dev.codefresh.io
+
+  #specify path
+  # IMPORTANT!!!
+  # - GCE requires * at the end
+  # - Nginx requires no star
+  path: /nomios/
+  
+  # Used to create an Ingress record
+  annotations:
+    # GCE Ingress Controller
+    # kubernetes.io/ingress.class: "gce"
+    # Nginx Ingress controller (default)
+    kubernetes.io/ingress.class: nginx-codefresh
+    nginx.ingress.kubernetes.io/service-upstream: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.org/redirect-to-https: "false"
+    # Other Ingress settings
+    # kubernetes.io/tls-acme: "true"
+
