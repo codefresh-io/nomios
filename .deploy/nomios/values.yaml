@@ -9,8 +9,8 @@ global:
 replicaCount: 1
 image:
   repository: codefresh/nomios
-  tag: 0.4
   pullPolicy: Always
+imageTag: 0.5
 
 # set log level
 logLevel: debug
