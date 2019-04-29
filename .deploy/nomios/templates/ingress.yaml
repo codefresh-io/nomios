@@ -1,0 +1,38 @@
+{{- if .Values.ingress.enabled -}}
+{{- $serviceName := include "nomios.fullname" . -}}
+{{- $servicePort := .Values.service.externalPort -}}
+{{- $publicDNS := include "nomios.publicDNS" . -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "nomios.fullname" . }}
+  labels:
+    app: {{ template "nomios.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    {{- range $key, $value := .Values.ingress.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  backend:
+    serviceName: {{ .Release.Name }}-cfui
+    servicePort: 80
+  rules:
+    - host: '{{ .Values.ingress.domain | default .Values.global.appUrl }}'
+      http:
+        paths:
+        - path: {{ .Values.ingress.path | quote }}
+          backend:
+            serviceName: {{ $serviceName }}
+            servicePort: {{ $servicePort }}
+  tls:
+    - hosts:
+      - '{{ .Values.ingress.domain | default .Values.global.appUrl }}'
+      {{- if .Values.ingress.webTlsSecretName }}
+      secretName: {{ .Release.Name }}-codefresh-{{ .Values.ingress.webTlsSecretName }}
+      {{- else }}
+      secretName: {{ .Release.Name }}-codefresh-star-selfsigned
+      {{- end }}
+{{- end -}}

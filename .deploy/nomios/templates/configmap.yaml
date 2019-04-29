@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "nomios.fullname" . }}
+  labels:
+    app: {{ template "nomios.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    type: {{ .Values.event.type }}
+    kind: {{ .Values.event.kind }}
+data:
+  # always regenerate random token - leads to shanged SHA256 sum and thus Deployment recreate
+  random_token: {{ randAlphaNum 10 | b64enc | quote }}
+  # DockerHub trigger type configuration
+  config.json: |
+    {
+      "type": "registry",
+      "kind": "dockerhub",
+      "service-url": "http://{{ template "nomios.fullname" . }}:{{ .Values.service.externalPort }}",
+      "uri-template": "registry:dockerhub:{{"{{"}}namespace{{"}}"}}:{{"{{"}}name{{"}}"}}:push",
+      "uri-regex": "^registry:dockerhub:[a-z0-9_-]+:[a-z0-9_-]+:push$",
+      "help-url": "https://codefresh.io/docs/docs/pipeline-triggers/configure-dockerhub-trigger/",
+      "config": [
+        {
+          "name": "namespace",
+          "type": "string",
+          "help": "Docker Hub user or organization name",
+          "validator": "^[a-z0-9_-]+$",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "help": "docker image name",
+          "validator": "^[a-z0-9_-]+$",
+          "required": true
+        },
+        {
+          "name": "action",
+          "type": "list",
+          "help": "docker push command",
+          "options": {
+            "Push Image": "push"
+          },
+          "validator": "^(push)$",
+          "required": true
+        }
+      ],
+      "filters": [
+        {
+          "name": "tag",
+          "type": "string",
+          "help": "RE2 regular expression",
+          "validator": "^.+$"
+        }
+      ]
+    }

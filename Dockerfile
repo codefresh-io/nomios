@@ -29,6 +29,7 @@ COPY . .
 FROM godev AS tester
 
 # run tests
+ARG VERSION
 RUN hack/test.sh
 
 # upload coverage reports to Codecov.io: pass CODECOV_TOKEN as build-arg
@@ -50,6 +51,7 @@ RUN if [ "$CODECOV_TOKEN" != "" ]; then curl -s $CODECOV_BASH_URL | bash -s; fi
 FROM godev AS builder
 
 # build binary
+ARG VERSION
 RUN hack/build.sh
 
 #
