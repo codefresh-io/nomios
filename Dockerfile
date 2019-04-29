@@ -51,6 +51,7 @@ RUN if [ "$CODECOV_TOKEN" != "" ]; then curl -s $CODECOV_BASH_URL | bash -s; fi
 FROM godev AS builder
 
 # build binary
+ARG VERSION
 RUN hack/build.sh
 
 #
