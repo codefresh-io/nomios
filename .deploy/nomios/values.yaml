@@ -9,7 +9,7 @@ global:
 replicaCount: 1
 image:
   name: codefresh/nomios
-  registry: r.cfcr.io/codefresh-inc/
+  dockerRegistry: r.cfcr.io/codefresh-inc/
   pullPolicy: Always
 imageTag: 0.5
 
