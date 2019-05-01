@@ -25,13 +25,8 @@ spec:
         kind: {{ .Values.event.kind }}
         action: {{ .Values.event.action }}
     spec:
-      {{- if .Values.global.privateRegistry }}
       imagePullSecrets:
         - name: "{{ .Release.Name }}-{{ .Values.global.codefresh }}-registry"
-      {{- else }}
-      imagePullSecrets:
-        - name: "{{ .Release.Name }}-{{ .Values.global.codefresh }}-registry"
-      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           {{- if .Values.global.privateRegistry }} 
