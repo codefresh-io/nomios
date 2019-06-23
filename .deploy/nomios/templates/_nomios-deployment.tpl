@@ -16,9 +16,9 @@ metadata:
     version: {{ .version | default "base" | quote  }}
 spec:
   replicas: {{ .Values.replicaCount }}
-    selector:
-      matchLabels:
-        app: {{ template "nomios.name" . }}
+  selector:
+    matchLabels:
+      app: {{ template "nomios.name" . }}
   template:
     metadata:
       annotations:
