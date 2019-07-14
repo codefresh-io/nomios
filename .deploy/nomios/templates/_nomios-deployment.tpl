@@ -81,9 +81,9 @@ spec:
             periodSeconds: 15
             failureThreshold: 5
           resources:
-    {{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
       nodeSelector:
-    {{ toYaml .Values.nodeSelector | indent 8 }}
+{{ toYaml .Values.nodeSelector | indent 8 }}
     {{- end }}
 {{- end }}
