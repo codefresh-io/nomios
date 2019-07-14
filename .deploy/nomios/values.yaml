@@ -5,6 +5,8 @@ global:
 # Declare variables to be passed into your templates.
 global:
   codefresh: codefresh
+  istio:
+    enabled: false
 
 replicaCount: 1
 image:
