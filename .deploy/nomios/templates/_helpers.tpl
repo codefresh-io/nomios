@@ -21,7 +21,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "nomios.fullnameOverride" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- $namePrefix := default .Release.Name .Values.releaseNameOverride -}}
+{{- $namePrefix := default .Release.Name .Values.global.releaseNameOverride -}}
 {{- printf "%s-%s" $namePrefix $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 

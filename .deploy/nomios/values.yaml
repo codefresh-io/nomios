@@ -7,9 +7,8 @@ global:
   codefresh: codefresh
   istio:
     enabled: false
-
-#Change it in cases we need to override service name prefix. Needed for Canary deployment with nginx ingress controller
-#releaseNameOverride: production
+  #Change it in cases we need to override service name prefix. Needed for Canary deployment with nginx ingress controller
+  #releaseNameOverride: production
 
 replicaCount: 1
 image:
