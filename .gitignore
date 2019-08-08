@@ -12,3 +12,4 @@
 **/*.tgz
 index.yaml
 /.gtm/
+.deploy/out

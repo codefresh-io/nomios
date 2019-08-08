@@ -8,6 +8,9 @@ global:
   istio:
     enabled: false
 
+#Change it in cases we need to override service name prefix. Needed for Canary deployment with nginx ingress controller
+#releaseNameOverride: production
+
 replicaCount: 1
 image:
   name: codefresh/nomios
