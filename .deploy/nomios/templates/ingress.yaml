@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $serviceName := include "nomios.fullname" . -}}
+{{- $serviceName := include "nomios.fullnameOverride" . -}}
 {{- $servicePort := .Values.service.externalPort -}}
 {{- $publicDNS := include "nomios.publicDNS" . -}}
 apiVersion: extensions/v1beta1
