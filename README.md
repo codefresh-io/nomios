@@ -74,3 +74,4 @@ OPTIONS:
 1. Clone this repository into `$GOPATH/src/github.com/codefresh-io/nomios`
 1. Run `hack/build.sh` helper script or `go build cmd/main.go`%
 1. Run `hack/test.sh` to run all tests
+
