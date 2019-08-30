@@ -35,7 +35,7 @@ func NewAzure(svc hermes.Service) *azure {
 
 func constructEventURI(payload *webhookPayload, account string) string {
 	ns := strings.Split(payload.Request.Host, ".")
-	uri := fmt.Sprintf("registry:azure:%s:%s:push", ns[0], payload.Target.Name)
+	uri := fmt.Sprintf("registry:azure:%s:%s:push", ns[0], payload.Target.Repository)
 	if account != "" {
 		uri = fmt.Sprintf("%s:%s", uri, account)
 	}
