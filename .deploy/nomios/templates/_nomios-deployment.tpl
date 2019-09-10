@@ -23,7 +23,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
-        sidecar.istio.io/inject: {{ $.Values.global.istio.enabled | default "false" | quote }}
+        sidecar.istio.io/inject: {{ or $.Values.global.istio.enableForSupportingStabeLatestEnvironments $.Values.global.istio.enabled  | default false | quote }}
       labels:
         app: {{ template "nomios.name" . }}
         role: {{ template "nomios.role" . }}
