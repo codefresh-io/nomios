@@ -3,10 +3,14 @@ global:
 # Default values for nomios.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+# global.istio.enabled is for using istio for several versions of same service in same namespace
+# global.istio.enableForSupportingStabeLatestEnvironments is for using istio just to route traffic to latest or stable version which are in different namespaces
 global:
   codefresh: codefresh
+  stableVersion: latest
   istio:
     enabled: false
+    enableForSupportingStabeLatestEnvironments: false
   #Change it in cases we need to override service name prefix. Needed for Canary deployment with nginx ingress controller
   #releaseNameOverride: production
 
