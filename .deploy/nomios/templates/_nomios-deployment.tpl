@@ -33,6 +33,7 @@ spec:
         kind: {{ .Values.event.kind }}
         action: {{ .Values.event.action }}
         version: {{ .version | default "base" | quote  }}
+        stable-version: {{ .stableVersion | default "false" | quote  }}
     spec:
       imagePullSecrets:
         - name: "{{ .Release.Name }}-{{ .Values.global.codefresh }}-registry"
