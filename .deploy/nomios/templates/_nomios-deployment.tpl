@@ -14,6 +14,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     version: {{ .version | default "base" | quote  }}
+    stable-version: {{ .stableVersion | default "false" | quote  }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

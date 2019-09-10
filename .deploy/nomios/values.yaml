@@ -7,6 +7,7 @@ global:
 # global.istio.enableForSupportingStabeLatestEnvironments is for using istio just to route traffic to latest or stable version which are in different namespaces
 global:
   codefresh: codefresh
+  stableVersion: latest
   istio:
     enabled: false
     enableForSupportingStabeLatestEnvironments: false

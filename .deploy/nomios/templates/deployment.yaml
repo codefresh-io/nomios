@@ -1,4 +1,4 @@
-{{ template "nomios.renderDeployment" (dict "imageTag" .Values.imageTag "Chart" .Chart "Release" .Release "Values" .Values "Template" .Template) }}
+{{ template "nomios.renderDeployment" (dict "stableVersion" .Values.global.stableVersion "imageTag" .Values.imageTag "Chart" .Chart "Release" .Release "Values" .Values "Template" .Template) }}
 
 {{- if .Values.global.istio.enabled }}
   {{- range $i, $value := .Values.global.istio.extraDeployments }}
