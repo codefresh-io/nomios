@@ -23,7 +23,7 @@ type (
 	}
 )
 
-const validURI = `^(registry|helm):(dockerhub|quay|jfrog|azure):[a-z0-9_-]+:[a-z0-9_-]+:push(:[[:xdigit:]]{12})$`
+const validURI = `^(registry|helm):(dockerhub|quay|jfrog|azure):[a-z0-9_-]+:[\/a-z0-9_-]+:push(:[[:xdigit:]]{12})$`
 
 // compiled validator regexp
 var validator, _ = regexp.Compile(validURI)
