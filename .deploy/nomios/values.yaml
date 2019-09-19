@@ -14,6 +14,10 @@ global:
   #Change it in cases we need to override service name prefix. Needed for Canary deployment with nginx ingress controller
   #releaseNameOverride: production
 
+# used if we want to enable istio only for this service
+istio:
+  enabled: false
+
 replicaCount: 1
 image:
   name: codefresh/nomios
