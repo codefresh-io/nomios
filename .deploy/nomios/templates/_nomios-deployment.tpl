@@ -44,6 +44,8 @@ spec:
           {{- else }}
           image: "{{ .Values.image.dockerRegistry }}{{ .Values.image.name }}:{{ .imageTag }}"
           {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
