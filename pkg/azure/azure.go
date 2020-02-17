@@ -77,9 +77,9 @@ func (d *azure) HandleWebhook(c *gin.Context) {
 	event.Variables["event"] = payload.Action
 	ns := strings.Split(payload.Request.Host, ".")
 	event.Variables["namespace"] = ns[0]
-	event.Variables["name"] = payload.Target.Name
+	event.Variables["name"] = payload.Target.Repository
 	event.Variables["tag"] = payload.Target.Tag
-	//event.Variables["pusher"] = payload.Artifactory.Webhook.Data.Event.ModifiedBy
+	event.Variables["provider"] = "azure"
 	event.Variables["pushed_at"] = payload.Timestamp
 
 	// get secret from URL query

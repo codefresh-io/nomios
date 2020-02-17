@@ -1,4 +1,4 @@
-package azure
+package quay
 
 import (
 	"bytes"
@@ -36,33 +36,32 @@ func TestContextBindWithQuery(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	payload.Target.Name = "repo"
 	data, _ := json.Marshal(payload)
-	c.Request, err = http.NewRequest("POST", "/azure?secret=SECRET&account=cb1e73c5215b", bytes.NewBufferString(string(data)))
+	c.Request, err = http.NewRequest("POST", "/quay?secret=SECRET&account=cb1e73c5215b", bytes.NewBufferString(string(data)))
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// setup mock
 	hermesMock := new(HermesMock)
-	eventURI := "registry:azure:host:namespace/repo:push:cb1e73c5215b"
+	eventURI := "registry:quay:namespace:name:push:cb1e73c5215b"
 	event := hermes.NormalizedEvent{
 		Original: string(data),
 		Secret:   "SECRET",
 		Variables: map[string]string{
+			"namespace": "namespace",
+			"name":      "name",
+			"tag":       "updated_tags",
 			"event":     "push",
-			"namespace": "host",
-			"name":      "namespace/repo",
-			"tag":       "latest",
-			"provider":  "azure",
-			"pushed_at": "2018-11-05T18:24:27.609016022Z",
+			"url":       "homepage",
+			"provider":  "quay",
 		},
 	}
 	hermesMock.On("TriggerEvent", eventURI, &event).Return(nil)
 
-	// bind dockerhub to hermes API endpoint
-	azure := NewAzure(hermesMock)
-	router.POST("/azure", azure.HandleWebhook)
+	// bind quay to hermes API endpoint
+	quay := NewQuay(hermesMock)
+	router.POST("/quay", quay.HandleWebhook)
 	router.HandleContext(c)
 
 	// assert expectations
