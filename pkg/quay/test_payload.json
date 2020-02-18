@@ -1,0 +1,9 @@
+{
+  "name": "name",
+  "repository": "repository",
+  "docker_url": "docker_url",
+  "namespace": "namespace",
+  "pruned_image_count": 5,
+  "homepage": "homepage",
+  "updated_tags": ["updated_tags"]
+}

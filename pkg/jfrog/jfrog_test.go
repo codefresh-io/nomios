@@ -56,6 +56,7 @@ func TestContextBindWithQuery(t *testing.T) {
 			"name":      "test",
 			"tag":       "tagName",
 			"pusher":    "admin",
+			"provider":  "jfrog",
 			"pushed_at": time.Unix(1540479021, 0).Format(time.RFC3339),
 		},
 	}

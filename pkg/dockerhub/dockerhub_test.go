@@ -55,6 +55,9 @@ func TestContextBindWithQuery(t *testing.T) {
 			"name":      "alpine-plus",
 			"tag":       "latest",
 			"pusher":    "alexeiled",
+			"provider":  "dockerhub",
+			"event":     "push",
+			"url":       "https://hub.docker.com/r/alexeiled/alpine-plus",
 			"pushed_at": time.Unix(1512920349, 0).Format(time.RFC3339),
 		},
 	}

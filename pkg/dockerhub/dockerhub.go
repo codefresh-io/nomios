@@ -57,7 +57,7 @@ func constructEventURI(payload *webhookPayload, account string) string {
 }
 
 // HandleWebhook handle DockerHub webhook
-func (d *DockerHub) HandleWebhook(c *gin.Context)  {
+func (d *DockerHub) HandleWebhook(c *gin.Context) {
 	log.Debug("Got Docker Hub webhook event")
 	payload := webhookPayload{}
 	if err := c.BindJSON(&payload); err != nil {
@@ -82,6 +82,9 @@ func (d *DockerHub) HandleWebhook(c *gin.Context)  {
 	event.Variables["name"] = payload.Repository.Name
 	event.Variables["tag"] = payload.PushData.Tag
 	event.Variables["pusher"] = payload.PushData.Pusher
+	event.Variables["provider"] = "dockerhub"
+	event.Variables["event"] = "push"
+	event.Variables["url"] = payload.Repository.RepoURL
 	event.Variables["pushed_at"] = time.Unix(int64(payload.PushData.PushedAt), 0).Format(time.RFC3339)
 
 	// get secret from URL query
