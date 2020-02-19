@@ -1,0 +1,15 @@
+{
+  "artifactory": {
+    "webhook": {
+      "event": "storage.afterCreate",
+      "data": {
+        "modifiedBy": "admin",
+        "created": 1540479021000,
+        "repoPath": {
+          "repoKey": "local",
+          "name": "name"
+        }
+      }
+    }
+  }
+}

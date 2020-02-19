@@ -79,6 +79,7 @@ func (d *azure) HandleWebhook(c *gin.Context) {
 	event.Variables["namespace"] = ns[0]
 	event.Variables["name"] = payload.Target.Repository
 	event.Variables["tag"] = payload.Target.Tag
+	event.Variables["type"] = "registry"
 	event.Variables["provider"] = "azure"
 	event.Variables["pushed_at"] = payload.Timestamp
 

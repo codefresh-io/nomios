@@ -75,6 +75,8 @@ func (d *JFrogHelm) HandleWebhook(c *gin.Context) {
 	event.Variables["event"] = payload.Artifactory.Webhook.Event
 	event.Variables["namespace"] = payload.Artifactory.Webhook.Data.RepoPath.RepoKey
 	event.Variables["name"] = payload.Artifactory.Webhook.Data.RepoPath.Name
+	event.Variables["provider"] = "jfrog"
+	event.Variables["type"] = "helm"
 	event.Variables["pusher"] = payload.Artifactory.Webhook.Data.ModifiedBy
 	event.Variables["pushed_at"] = time.Unix(int64(payload.Artifactory.Webhook.Data.Created/1000), 0).Format(time.RFC3339)
 

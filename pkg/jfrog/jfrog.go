@@ -82,6 +82,7 @@ func (d *JFrog) HandleWebhook(c *gin.Context) {
 	event.Variables["name"] = payload.Artifactory.Webhook.Data.Docker.Image
 	event.Variables["tag"] = payload.Artifactory.Webhook.Data.Docker.Tag
 	event.Variables["provider"] = "jfrog"
+	event.Variables["type"] = "registry"
 	event.Variables["pusher"] = payload.Artifactory.Webhook.Data.Event.ModifiedBy
 	event.Variables["pushed_at"] = time.Unix(int64(payload.Artifactory.Webhook.Data.Event.Created/1000), 0).Format(time.RFC3339)
 

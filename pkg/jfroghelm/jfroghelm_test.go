@@ -1,4 +1,4 @@
-package jfrog
+package jfroghelm
 
 import (
 	"bytes"
@@ -39,33 +39,32 @@ func TestContextBindWithQuery(t *testing.T) {
 		t.Fatal(err)
 	}
 	data, _ := json.Marshal(payload)
-	c.Request, err = http.NewRequest("POST", "/jfrog?secret=SECRET&account=cb1e73c5215b", bytes.NewBufferString(string(data)))
+	c.Request, err = http.NewRequest("POST", "/helm/jfrog?secret=SECRET&account=cb1e73c5215b", bytes.NewBufferString(string(data)))
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	// setup mock
 	hermesMock := new(HermesMock)
-	eventURI := "registry:jfrog:local:test:push:cb1e73c5215b"
+	eventURI := "helm:jfrog:local:name:push:cb1e73c5215b"
 	event := hermes.NormalizedEvent{
 		Original: string(data),
 		Secret:   "SECRET",
 		Variables: map[string]string{
-			"event":     "docker.tagCreated",
+			"event":     "storage.afterCreate",
 			"namespace": "local",
-			"name":      "test",
-			"tag":       "tagName",
+			"name":      "name",
 			"pusher":    "admin",
 			"provider":  "jfrog",
-			"type":      "registry",
+			"type":      "helm",
 			"pushed_at": time.Unix(1540479021, 0).Format(time.RFC3339),
 		},
 	}
 	hermesMock.On("TriggerEvent", eventURI, &event).Return(nil)
 
 	// bind dockerhub to hermes API endpoint
-	jfrog := NewJFrog(hermesMock)
-	router.POST("/jfrog", jfrog.HandleWebhook)
+	jfroghelm := NewJFrog(hermesMock)
+	router.POST("/helm/jfrog", jfroghelm.HandleWebhook)
 	router.HandleContext(c)
 
 	// assert expectations

@@ -55,6 +55,7 @@ func TestContextBindWithQuery(t *testing.T) {
 			"name":      "namespace/repo",
 			"tag":       "latest",
 			"provider":  "azure",
+			"type":      "registry",
 			"pushed_at": "2018-11-05T18:24:27.609016022Z",
 		},
 	}
