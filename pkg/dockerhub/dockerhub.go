@@ -84,6 +84,7 @@ func (d *DockerHub) HandleWebhook(c *gin.Context) {
 	event.Variables["pusher"] = payload.PushData.Pusher
 	event.Variables["provider"] = "dockerhub"
 	event.Variables["event"] = "push"
+	event.Variables["type"] = "registry"
 	event.Variables["url"] = payload.Repository.RepoURL
 	event.Variables["pushed_at"] = time.Unix(int64(payload.PushData.PushedAt), 0).Format(time.RFC3339)
 

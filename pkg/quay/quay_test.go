@@ -55,6 +55,7 @@ func TestContextBindWithQuery(t *testing.T) {
 			"event":     "push",
 			"url":       "homepage",
 			"provider":  "quay",
+			"type":      "registry",
 		},
 	}
 	hermesMock.On("TriggerEvent", eventURI, &event).Return(nil)

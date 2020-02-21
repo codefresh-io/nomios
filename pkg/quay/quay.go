@@ -64,6 +64,7 @@ func (q *Quay) HandleWebhook(c *gin.Context) {
 	event.Variables["event"] = "push"
 	event.Variables["url"] = payload.Homepage
 	event.Variables["provider"] = "quay"
+	event.Variables["type"] = "registry"
 
 	// get secret from URL query
 	event.Secret = c.Query("secret")
