@@ -14,6 +14,11 @@ global:
   #Change it in cases we need to override service name prefix. Needed for Canary deployment with nginx ingress controller
   #releaseNameOverride: production
 
+podSecurityContext:
+  runAsNonRoot: true
+  runAsGroup: 0
+  fsGroup: 0
+  runAsUser: 1000
 # used if we want to enable istio only for this service
 istio:
   enabled: false
