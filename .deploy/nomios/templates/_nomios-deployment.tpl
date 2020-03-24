@@ -35,6 +35,11 @@ spec:
         version: {{ .version | default "base" | quote  }}
         stable-version: {{ .stableVersion | default "false" | quote  }}
     spec:
+      {{- $podSecurityContext := (kindIs "invalid" .Values.global.podSecurityContextOverride) | ternary .Values.podSecurityContext .Values.global.podSecurityContextOverride }}
+      {{- with $podSecurityContext }}
+      securityContext:
+{{ toYaml . | indent 8}}
+      {{- end }}
       imagePullSecrets:
         - name: "{{ .Release.Name }}-{{ .Values.global.codefresh }}-registry"
       containers:
@@ -86,11 +91,6 @@ spec:
             failureThreshold: 5
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-      securityContext:
-        runAsNonRoot: true
-        runAsGroup: 0
-        fsGroup: 0
-        runAsUser: 1000
     {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
