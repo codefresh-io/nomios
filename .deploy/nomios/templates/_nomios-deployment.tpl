@@ -35,10 +35,12 @@ spec:
         version: {{ .version | default "base" | quote  }}
         stable-version: {{ .stableVersion | default "false" | quote  }}
     spec:
+      {{- if not .Values.global.devEnvironment }}
       {{- $podSecurityContext := (kindIs "invalid" .Values.global.podSecurityContextOverride) | ternary .Values.podSecurityContext .Values.global.podSecurityContextOverride }}
       {{- with $podSecurityContext }}
       securityContext:
 {{ toYaml . | indent 8}}
+      {{- end }}
       {{- end }}
       imagePullSecrets:
         - name: "{{ .Release.Name }}-{{ .Values.global.codefresh }}-registry"
@@ -49,8 +51,10 @@ spec:
           {{- else }}
           image: "{{ .Values.image.dockerRegistry }}{{ .Values.image.name }}:{{ .imageTag }}"
           {{- end }}
+          {{- if not .Values.global.devEnvironment }}
           securityContext:
             allowPrivilegeEscalation: false
+          {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
