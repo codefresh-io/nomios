@@ -110,6 +110,11 @@ Copyright © Codefresh.io`, version.ASCIILogo)
 			Usage:  "produce log in Codefresh JSON format",
 			EnvVar: "LOG_JSON",
 		},
+		cli.StringFlag{
+			Name:   "new-relic",
+			Usage:  "set New Relic License Key",
+			EnvVar: "NEWRELIC_LICENSE_KEY",
+		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
