@@ -73,6 +73,11 @@ spec:
               {{- end }}
               - name: HERMES_SERVICE
                 value: {{ .Values.hermesService | default (printf "%s-hermes" .Release.Name) }}
+              - name: NEWRELIC_LICENSE_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{ .Release.Name }}-{{ .Values.global.codefresh }}"
+                    key: newrelic-license-key
               - name: PUBLIC_DNS_NAME
                 value: "https://{{ template "nomios.publicDNS" . }}"
               - name: PORT
