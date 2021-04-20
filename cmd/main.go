@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	newrelic "github.com/newrelic/go-agent"
 	"net/http"
 	"net/url"
 	"os"
@@ -20,6 +21,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
+
+var nrApp newrelic.Application
 
 // HermesDryRun dry run stub
 type HermesDryRun struct {
@@ -144,6 +147,22 @@ func before(c *cli.Context) error {
 	traceHook.FunctionField = logger.FieldNamespace
 	traceHook.AppField = logger.FieldService
 	log.AddHook(traceHook)
+
+	// set new relic monitoring
+	newRelicLicense := c.GlobalString("new-relic")
+	if newRelicLicense != "" {
+		log.Debug("setting New Relic agent")
+		cfg := newrelic.NewConfig("nomios[kubernetes]", newRelicLicense)
+		var err error
+		nrApp, err = newrelic.NewApplication(cfg)
+		if nil != err {
+			log.WithError(err).Error("failed to setup New Relic agent with provided license")
+			return err
+		}
+		log.Debug("setting New Relic agent hook for Logrus logging")
+		nrHook := logger.NewNewRelicLogrusHook(nrApp, []log.Level{log.ErrorLevel, log.FatalLevel, log.PanicLevel})
+		log.AddHook(nrHook)
+	}
 
 	return nil
 }
