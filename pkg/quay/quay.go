@@ -60,7 +60,9 @@ func (q *Quay) HandleWebhook(c *gin.Context) {
 	event.Variables["namespace"] = payload.Namespace
 	event.Variables["name"] = payload.Name
 	//TODO : handle array of tags
-	event.Variables["tag"] = payload.UpdatedTags[0]
+	if payload.UpdatedTags != nil && len(payload.UpdatedTags) > 0 {
+		event.Variables["tag"] = payload.UpdatedTags[0]
+	}
 	event.Variables["event"] = "push"
 	event.Variables["url"] = payload.Homepage
 	event.Variables["provider"] = "quay"
